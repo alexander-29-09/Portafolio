@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+    <title>Portafolio</title>
+</head>
+
+<body>
+    <section id="inicio">
+        <div class="contenido">
+            <header>
+                <div class="contenido-header">
+                    <h1>Portafolio</h1>
+                    <nav id="nav" class="">
+                        <ul id="links">
+                            <li><a href="#inicio" class="seleccionado" onclick="seleccionar(this)">INICIO</a></li>
+                            <li><a href="#sobremi" onclick="seleccionar(this)">SOBRE MI</a></li>
+                            <li><a href="#servicios" onclick="seleccionar(this)">CURSOS Y HOBBIES</a></li>
+                            <li><a href="#portfolio" onclick="seleccionar(this)">PORTFOLIO</a></li>
+                            <li><a href="#contacto" onclick="seleccionar(this)">CONTACTO</a></li>
+                        </ul>
+                    </nav>
+
+                   
+                    <div id="icono-nav" onclick="responsiveMenu()">
+                        <i class="fa-solid fa-bars"></i>
+                    </div>
+
+
+                    <div class="redes">
+                        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#"><i class="fa-brands fa-instagram-square"></i></a>
+                    </div>
+                </div>
+            </header>
+            <div class="presentacion">
+                <p class="bienvenida">Bienvenidos</p>
+                <h2>Soy <span>Samuel Galicia</span>, Desarrollador Web en curso</h2>
+                <p class="descripcion">Estudiante de Ing. en Sistemas y computación, especializado en front end,en Alura Latam </p>
+                <a href="#portfolio">Ir a Portafolio</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="sobremi">
+
+        <div class="contenedor-foto">
+            <img src="imagenes/" alt="foto presentacion">
+        </div>
+        <div class="sobremi">
+            <p class="titulo-seccion">Sobre Mi</p>
+            <h2>Hola, Soy <span>Samuel Galicia</span> </h2>
+            <h3>Desarrollador Web en curso</h3>
+            <p> Estudiando actualmente en la Universidad Dr.Ándres Bello la carrera de Ing. en sistemas y Computación, adicional estudiando en Alura Latam,me presento como una persona responsable,proactiva y en busqueda de mi primer
+                trabajo como programador JR</p>
+            <a href="documentos/Curriculum.pdf">Descargar CV</a>
+        </div>
+    </section>
+
+    <section id="servicios">
+        <h3 class="titulo-seccion">Cursos realizados y Hobbies</h3>
+        <div class="fila">
+            <div class="servicio">
+                <span class="icono"> <i class="fa-solid fa-code"></i></span>
+                <h4>Cursos Diseño de Sitios Web</h4>
+                <ul class="servicios-tag">
+                    <li>Estudiante de tercer año en la carrera de Ing. en sistemas y Computación</li>
+                    <li>Formación Desarrollo personal en Alura Latam</li>
+                    <li>Formación Front End en Alura Latam</li>
+                </ul>
+                <p>Aprendiendo con Alura!</p>
+            </div>
+            <div class="servicio">
+                <span class="icono"><i class="fa-solid fa-file-code"></i></span>
+                <h4>Soft skills</h4>
+                <p>Comunicacion,liderazgo,empatia
+                </p>
+            </div>
+            <div class="servicio">
+                <span class="icono"><i class="fa-solid fa-arrow-trend-up"></i></span>
+                <h4>hobbies</h4>
+                <ul class="servicios-tag">
+                    <li>Video juegos</li>
+                    <li>Futbol</li>
+                    <li>Tocar instrumentos</li>
+                </ul>
+                <p>Disfruto mi tiempo al aire libre y tambien indoor
+                </p>
+            </div>
+        </div>
+
+
+        </div>
+    </section>
+
+
+    <div class="contenedor-skills" id="skills">
+        <h3>HABILIDADES </h3>
+        <div class="skill">
+            <div class="info">
+                <p> <span class="lista"> </span>Html & Css</p>
+                <span class="porcentaje">50%</span>
+            </div>
+
+            <div class="barra">
+                <div class="" id="html"></div>
+            </div>
+        </div>
+        <div class="skill">
+            <div class="info">
+                <p> <span class="lista"> </span>Javascript</p>
+                <span class="porcentaje">50%</span>
+            </div>
+
+            <div class="barra">
+                <div class="" id="js"></div>
+            </div>
+        </div>
+        <div class="skill">
+            <div class="info">
+                <p> <span class="lista"> </span>C#</p>
+                <span class="porcentaje">45%</span>
+            </div>
+
+            <div class="barra">
+                <div class="" id="C#"></div>
+            </div>
+        </div>
+        <div class="skill">
+            <div class="info">
+                <p> <span class="lista"> </span>SQLServer y MySQL</p>
+                <span class="porcentaje">45%</span>
+            </div>
+
+            <div class="barra">
+                <div class="" id="DB"></div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <section id="portfolio">
+        <h3 class="titulo-seccion">Mis Proyectos</h3>
+        <div class="fila">
+            <div class="proyecto">
+                <div class="overlay"></div>
+                <img src="imagenes/incriptador.png" alt="">
+                <div class="info">
+                    <h4>Descripcion Proyecto</h4>
+                    <p>Reto encriptador Alura</p>
+                </div>
+            </div>
+            <div class="proyecto">
+                <div class="overlay"></div>
+                <img src="imagenes/convertircm.png" alt="">
+                <div class="info">
+                    <h4>Descripcion Proyecto</h4>
+                    <p>Proyecto básico personal</p>
+                </div>
+            </div>
+    </section>
+
+    <section id="contacto">
+        <h3 class="titulo-seccion">CONTACTO</h3>
+        <div class="contenedor-form">
+            <form action="">
+                <div class="fila mitad">
+                    <input type="text" placeholder="Nombre Completo *" class="input-mitad">
+                    <input type="email" placeholder="Dirección de Email" class="input-mitad">
+                </div>
+                <div class="fila">
+                    <input type="text" placeholder="Tema..." class="input-full">
+                </div>
+                <div class="fila">
+                    <textarea name="" id="" cols="30" rows="10" placeholder="Tu Mensaje..."
+                        class="input-full"></textarea>
+                </div>
+
+                <input type="submit" value="Enviar Mensaje" class="btn-enviar">
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <img class="imagen-tel" href="./img/">
+        <div class="redes">
+            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram-square"></i></a>
+        </div>
+        <p> © copyright-Samuel Galicia-2023</p>
+
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
