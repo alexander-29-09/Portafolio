@@ -281,7 +281,7 @@ function responder(msg){
     else if(estado === "mensaje"){
         datos.mensaje = msg;
 
-        fetch("http://localhost:5000/contact", {
+        fetch("https://portafolio-ebt4.onrender.com", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(datos)
