@@ -31,12 +31,12 @@ Mensaje:
 
         msg = MIMEText(contenido)
         msg['Subject'] = 'Nuevo mensaje desde portafolio'
-        msg['From'] = "TU_CORREO@gmail.com"
-        msg['To'] = "TU_CORREO@gmail.com"
+        msg['From'] = "helpdesk.unab@gmail.com"
+        msg['To'] = "helpdesk.unab@gmail.com"
 
         # Enviar correo
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.login("TU_CORREO@gmail.com", "TU_APP_PASSWORD")
+        server.login("helpdesk.unab@gmail.com", "uxcrmjeveduutwqp")
         server.send_message(msg)
         server.quit()
 

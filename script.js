@@ -249,7 +249,7 @@ function responder(msg){
         else if(msg.includes("contactar") || msg.includes("contratar")){
             botMsg(`Excelente decisión 💼<br><br>
             Samuel está abierto a oportunidades donde pueda aportar y seguir creciendo.<br><br>
-            Déjame tus datos y él te contactará directamente 👇`);
+            Por favor dime tu nombre 👇`);
             estado = "nombre";
         }
 
@@ -274,7 +274,7 @@ function responder(msg){
 
     else if(estado === "email"){
         datos.email = msg;
-        botMsg("Gracias 👍 ahora dime brevemente qué necesitas o qué tipo de oportunidad tienes.");
+        botMsg("Gracias 👍 ahora dime brevemente qué necesitas o qué tipo de oportunidad tienes, por favor hazlo en un mismo texto. Gracias");
         estado = "mensaje";
     }
 
