@@ -25,6 +25,7 @@ function responsiveMenu() {
 
 window.onscroll = function() { efectoHabilidades() };
 
+
 function efectoHabilidades() {
     var skills = document.getElementById("skills");
     var distancia_skills = window.innerHeight - skills.getBoundingClientRect().top;
@@ -41,7 +42,126 @@ function efectoHabilidades() {
     }
 
 }
+//efecto de particulas
+particlesJS("particles-js", {
+  particles: {
+    number: {
+      value: 60
+    },
+    color: {
+      value: "#58e4f7"
+    },
+    shape: {
+      type: "circle"
+    },
+    opacity: {
+      value: 0.5
+    },
+    size: {
+      value: 3
+    },
+    line_linked: {
+      enable: true,
+      distance: 150,
+      color: "#58e4f7",
+      opacity: 0.4,
+      width: 1
+    },
+    move: {
+      enable: true,
+      speed: 2
+    }
+  },
+  interactivity: {
+    events: {
+      onhover: {
+        enable: true,
+        mode: "repulse"
+      }
+    }
+  }
+});
 
+// Carrusel de proyectos
+let index = 0;
+let autoScroll;
+
+const track = document.querySelector(".carousel-track");
+let items = document.querySelectorAll(".proyecto");
+
+// duplicar para efecto infinito
+track.innerHTML += track.innerHTML;
+items = document.querySelectorAll(".proyecto");
+
+function actualizarCarrusel() {
+    const itemWidth = items[0].offsetWidth + 20;
+    const offset = index * itemWidth;
+
+    track.style.transform = `translateX(-${offset}px)`;
+
+    // quitar active
+    items.forEach(el => el.classList.remove("active"));
+
+    // activar el actual
+    items[index].classList.add("active");
+}
+
+// AUTO SCROLL SUAVE
+function iniciarAutoScroll() {
+    autoScroll = setInterval(() => {
+        index++;
+
+        if (index >= items.length / 2) {
+            index = 0;
+            track.style.transition = "none";
+            track.style.transform = "translateX(0)";
+            setTimeout(() => {
+                track.style.transition = "transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)";
+            }, 50);
+        }
+
+        actualizarCarrusel();
+    }, 3000);
+}
+
+// PAUSA
+function detenerAutoScroll() {
+    clearInterval(autoScroll);
+}
+
+const carousel = document.querySelector(".carousel");
+
+carousel.addEventListener("mouseenter", detenerAutoScroll);
+carousel.addEventListener("mouseleave", iniciarAutoScroll);
+
+// TOUCH (SWIPE)
+let startX = 0;
+
+carousel.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    detenerAutoScroll();
+});
+
+carousel.addEventListener("touchend", (e) => {
+    let endX = e.changedTouches[0].clientX;
+
+    if (startX - endX > 50) {
+        index++;
+    } else if (endX - startX > 50) {
+        index--;
+    }
+
+    actualizarCarrusel();
+    iniciarAutoScroll();
+});
+
+// INIT
+actualizarCarrusel();
+iniciarAutoScroll();
+//Chatbot
+let estado = "inicio";
+let datos = {};
+let historial = [];
 
 // ===== TOGGLE  =====
 function toggleChat(){
@@ -70,6 +190,7 @@ document.getElementById("close-chat").onclick = function () {
 
 // ===== SONIDO =====
 const sonido = new Audio("audio/button-09a.mp3");
+sonido.volume = 0.03;
 
 // ===== AUTO SCROLL =====
 function scrollChat(){
@@ -77,22 +198,38 @@ function scrollChat(){
     chat.scrollTop = chat.scrollHeight;
 }
 
+
 // ===== MENSAJES =====
 function userMsg(text){
-    const chat = document.getElementById("chat-body");
-    chat.innerHTML += `<div class="msg-user">${text}</div>`;
-   // guardarChat();
-    scrollChat();
+    let chat = document.getElementById("chat-body");
+
+    let msg = document.createElement("div");
+    msg.className = "msg-user";
+    msg.innerText = text;
+
+    chat.appendChild(msg);
+   // sonido.play().catch(()=>{});
+    chat.scrollTop = chat.scrollHeight;
 }
 /*
 function guardarChat() {
     localStorage.setItem("chatHistorial", document.getElementById("chat-body").innerHTML);
 }*/
 function botMsg(text){
-    const chat = document.getElementById("chat-body");
-    chat.innerHTML += `<div class="msg-bot">${text}</div>`;
-   // guardarChat();
-    scrollChat();
+     let chat = document.getElementById("chat-body");
+
+    let msg = document.createElement("div");
+    msg.className = "msg-bot";
+    msg.innerHTML = text;
+
+    chat.appendChild(msg);
+    
+    chat.scrollTop = chat.scrollHeight;
+
+    // solo si el chat está abierto
+    if (chatAbierto) {
+        sonido.play().catch(()=>{});
+    }
 }
 /*window.onload = function () {
     const historial = localStorage.getItem("chatHistorial");
@@ -101,28 +238,37 @@ function botMsg(text){
     }
 };*/
 // ===== INDICADOR ESCRIBIENDO =====
+const typingSound = new Audio("audio/escritura.mp3");
 function typing(){
-    document.getElementById("chat-body").innerHTML += `<div class="typing">Escribiendo...</div>`;
-    scrollChat();
+    let chat = document.getElementById("chat-body");
+
+    let msg = document.createElement("div");
+    msg.className = "msg-bot typing";
+    msg.id = "typing";
+    msg.innerText = "Escribiendo...";
+
+    chat.appendChild(msg);
+    typingSound.loop = true;
+    typingSound.play().catch(()=>{});
+
+    chat.scrollTop = chat.scrollHeight;
 }
 
 function removeTyping(){
-    const typingEl = document.querySelector(".typing");
-    if(typingEl) typingEl.remove();
+    let t = document.getElementById("typing");
+    if(t) t.remove();
+    typingSound.pause();
+    typingSound.currentTime = 0;
 }
 
 // ===== IA SIMULADA =====
-let estado = "inicio";
-let datos = {};
 
-setTimeout(()=>{
-    botMsg("¡Hola! 👋 Soy el asistente de Samuel 🤖<br>¿Quieres contactarlo o ver sus proyectos?");
-},1000);
+
+
 
 // INPUT
 document.getElementById("chat-input").addEventListener("keydown", function(e){
 
-    // ENTER sin SHIFT
     if(e.key === "Enter" && !e.shiftKey){
         e.preventDefault();
 
@@ -132,12 +278,14 @@ document.getElementById("chat-input").addEventListener("keydown", function(e){
         this.value = "";
 
         userMsg(msg);
+        historial.push({user: msg});
+
         typing();
 
         setTimeout(()=>{
             removeTyping();
             responder(msg.toLowerCase());
-        },1000);
+        }, 800);
     }
 });
 
@@ -193,101 +341,163 @@ const perfil = {
 // ===== RESPUESTAS =====
 function responder(msg){
 
-    if(estado === "inicio"){
+    // 🔥 DETECCIÓN INTELIGENTE
+    if(msg.includes("experiencia") || msg.includes("trabajo")){
+        botMsg("Hey 👀 te cuento algo interesante...<br><br>Samuel ha trabajado desarrollando sistemas web, incluyendo un gestor de contraseñas 🔐 con seguridad avanzada, manejo de usuarios y base de datos.<br><br>También ha creado chatbots conectados a backend en Python y aplicaciones en ASP.NET 💻<br><br>Es alguien que no solo aprende… sino que construye 🚀");
+        return;
+    }
 
-        // PERFIL GENERAL
-        if(msg.includes("quien") || msg.includes("samuel") || msg.includes("perfil")){
-            botMsg(`Te cuento 👨‍💻<br><br>
-            Samuel es un ${perfil.pitch}.<br><br>
-            ${perfil.educacion}.<br><br>
-            Se caracteriza por su enfoque en resultados y su capacidad de adaptarse rápidamente a nuevas tecnologías 🚀`);
-        }
+    if(msg.includes("habilidad") || msg.includes("skills")){
+        botMsg("Buena pregunta 👌<br><br>Samuel combina habilidades técnicas y blandas:<br><br>💻 Técnicas:<br>- HTML, CSS, JavaScript<br>- C# y ASP.NET MVC<br>- SQL Server / MySQL<br>- Python (chatbots)<br><br>🤝 Blandas:<br>- Responsabilidad<br>- Trabajo en equipo<br>- Comunicación<br>- Proactividad<br><br>Un perfil bastante completo para un perfil junior 🔥");
+        return;
+    }
 
-        // EXPERIENCIA CON VALOR
-        else if(msg.includes("experiencia") || msg.includes("trabajo")){
-            botMsg(`Claro 👌 te doy un resumen concreto:<br><br>
-            🔹 ${perfil.experiencia.join("<br>🔹 ")}<br><br>
-            Algo importante es que no solo tiene conocimiento teórico, sino que ya ha trabajado en soluciones reales 💡`);
-        }
+    if(msg.includes("estudio") || msg.includes("universidad")){
+        botMsg("Samuel es egresado de Ingeniería en Sistemas 💻<br>y actualmente está en proceso de preespecialización en Ciencia de Datos 📊<br><br>Eso significa que no solo desarrolla… también entiende datos, análisis y lógica avanzada 👀");
+        return;
+    }
 
-        // HABILIDADES + ENFOQUE
-        else if(msg.includes("habilidad") || msg.includes("tecnologia")){
-            botMsg(`A nivel técnico 💻:<br><br>
-            🔧 ${perfil.habilidades_tecnicas.join("<br>🔧 ")}<br><br>
-            Esto le permite trabajar tanto en frontend como en backend sin problema.`);
-        }
+    if(msg.includes("contratar") || msg.includes("reclutar")){
+        botMsg("Te lo digo directo 👇<br><br>Si buscas alguien que:<br><br>✔ Aprende rápido<br>✔ Ya desarrolla proyectos reales<br>✔ Tiene bases sólidas en backend y frontend<br><br>Samuel es una excelente opción para iniciar como desarrollador JR 🚀<br><br>¿Quieres contactarlo? 😄");
+        return;
+    }
 
-        // FORTALEZAS 
-        else if(msg.includes("fortaleza") || msg.includes("porque contratar")){
-            botMsg(`Buena pregunta 👀<br><br>
-            Algunas razones por las que Samuel destaca:<br><br>
-            ⭐ ${perfil.fortalezas.join("<br>⭐ ")}<br><br>
-            Es alguien que no solo programa, sino que busca soluciones eficientes.`);
-        }
-
-        // PROYECTOS 
-        else if(msg.includes("proyecto")){
-            botMsg(`Aquí es donde demuestra lo que sabe hacer 🚀<br><br>
-            🔹 ${perfil.proyectos.join("<br>🔹 ")}<br><br>
-            Son proyectos enfocados en resolver necesidades reales, no solo académicas.`);
-        }
-
-        // EDUCACIÓN
-        else if(msg.includes("estudio") || msg.includes("educacion")){
-            botMsg(`🎓 ${perfil.educacion}.<br><br>
-            Además, complementa su formación con cursos y práctica constante.`);
-        }
-
-        // CURSOS
-        else if(msg.includes("curso")){
-            botMsg(`Samuel también se ha preparado constantemente 📚:<br><br>
-            📌 ${perfil.cursos.join("<br>📌 ")}<br><br>
-            Siempre está aprendiendo nuevas tecnologías.`);
-        }
-
-        // CONTACTO 
-        else if(msg.includes("contactar") || msg.includes("contratar")){
-            botMsg(`Excelente decisión 💼<br><br>
-            Samuel está abierto a oportunidades donde pueda aportar y seguir creciendo.<br><br>
-            Por favor dime tu nombre 👇`);
-            estado = "nombre";
-        }
-
-        // RESPUESTA GENERAL
-        else{
-            botMsg(`Hola 👋 soy el asistente de Samuel 🤖<br><br>
-            Si estás evaluando su perfil puedo ayudarte con:<br><br>
-            💼 Experiencia<br>
-            💻 Habilidades<br>
-            🚀 Proyectos<br>
-            ⭐ Fortalezas<br><br>
-            O si lo prefieres, te ayudo a contactarlo directamente 😉`);
-        }
+    if(msg.includes("proyecto")){
+        botMsg("Samuel ha trabajado en varios proyectos interesantes 👇<br><br>🔐 Sistema de gestión de contraseñas<br>🤖 Chatbot inteligente con backend<br>🌐 Aplicaciones web con base de datos<br><br>Puedes verlos en la sección de portafolio 👆🔥");
+        return;
     }
 
     // ===== FLUJO CONTACTO =====
-    else if(estado === "nombre"){
+    if(estado === "inicio"){
+        botMsg("No comprendo tu pregunta 🥹 por favor dime que deseas. 🤖<br><br>Puedo contarte sobre su experiencia, habilidades o ayudarte a contactarlo.<br><br>¿Qué te gustaría saber?");
+        estado = "menu";
+        return;
+    }
+
+    if(estado === "menu"){
+        if(msg.includes("contact")){
+            botMsg("Perfecto 🙌<br>Vamos a ponerte en contacto directo con Samuel.<br><br>¿Cuál es tu nombre?");
+            estado = "nombre";
+        } else {
+            botMsg("Puedo ayudarte con:<br><br>💼 Experiencia<br>🧠 Habilidades<br>📊 Estudios<br>📩 Contacto<br><br>Solo dime 👇");
+        }
+        return;
+    }
+
+    if(estado === "nombre"){
         datos.nombre = msg;
-        botMsg(`Perfecto ${msg} 🙌<br>¿Cuál es tu correo?`);
+        botMsg(`Mucho gusto ${msg} 😄<br>¿Cuál es tu correo?`);
         estado = "email";
+        return;
     }
 
-    else if(estado === "email"){
+    if(estado === "email"){
         datos.email = msg;
-        botMsg("Gracias 👍 ahora dime brevemente qué necesitas o qué tipo de oportunidad tienes, por favor hazlo en un mismo texto. Gracias");
+        botMsg("Perfecto 👍<br>Ahora escribe el mensaje que deseas enviar:");
         estado = "mensaje";
+        return;
     }
 
-    else if(estado === "mensaje"){
+    if(estado === "mensaje"){
         datos.mensaje = msg;
 
-        fetch("https://portafolio-ebt4.onrender.com", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(datos)
-        });
+        botMsg("🔥 Listo, mensaje preparado:<br><br>" +
+            `<b>Nombre:</b> ${datos.nombre}<br>` +
+            `<b>Email:</b> ${datos.email}<br>` +
+            `<b>Mensaje:</b> ${datos.mensaje}<br><br>` +
+            "Samuel lo recibirá pronto 📩");
 
-        botMsg("🚀 Listo, tu mensaje fue enviado.<br>Samuel te responderá lo antes posible.");
-        estado = "inicio";
+        estado = "fin";
+        return;
     }
+
+    botMsg("Interesante 🤔… puedo ayudarte mejor si me dices algo sobre experiencia, habilidades o contacto.");
 }
+
+//ocultar estado de chat al dar click 
+const toggle = document.getElementById("chat-toggle");
+let chatAbierto = false;
+let animandoChat = false;
+
+let primeraApertura = true;
+
+document.getElementById("chat-toggle").onclick = function () {
+
+    if (animandoChat) return; // vita doble click
+
+    const chat = document.getElementById("chatbot");
+    const status = document.querySelector(".chat-status");
+
+    animandoChat = true;
+
+    if (!chatAbierto) {
+        // ABRIR
+        chat.classList.remove("hidden");
+
+        setTimeout(() => {
+            chat.classList.add("active");
+            animandoChat = false;
+        }, 10);
+
+        status.style.display = "none";
+
+        chatAbierto = true;
+
+        if (primeraApertura) {
+            setTimeout(() => {
+                botMsg("¡Hola! 👋 Soy Criss, el asistente de Samuel 🤖<br> dime en qué puedo ayudarte 💻 o escribe *contacto* 📩");
+            }, 800);
+
+            primeraApertura = false;
+        }
+
+    } else {
+        // CERRAR
+        chat.classList.remove("active");
+
+        setTimeout(() => {
+            chat.classList.add("hidden");
+            animandoChat = false;
+        }, 300);
+
+        status.style.display = "flex";
+
+        chatAbierto = false;
+    }
+};
+
+document.getElementById("close-chat").onclick = function () {
+    document.getElementById("chat-toggle").click();
+};
+// BOTÓN VOLVER ARRIBA
+const btnTop = document.getElementById("btnTop");
+
+window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        btnTop.style.display = "block";
+    } else {
+        btnTop.style.display = "none";
+    }
+});
+
+btnTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+});
+
+const estados = [
+    "En línea",
+    "Responde en minutos",
+    "Estoy disponible 👀",
+    "¿Hablamos?",
+    "Listo para ayudarte 💬"
+];
+
+let i = 0;
+
+setInterval(() => {
+    i = (i + 1) % estados.length;
+    document.getElementById("status-text").textContent = estados[i];
+}, 3000);

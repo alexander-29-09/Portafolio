@@ -14,42 +14,55 @@
 
 <body>
     <section id="inicio">
-        <div class="contenido">
-            <header>
-                <div class="contenido-header">
-                    <h1>Portafolio</h1>
-                    <nav id="nav" class="">
-                        <ul id="links">
-                            <li><a href="#inicio" class="seleccionado" onclick="seleccionar(this)">INICIO</a></li>
-                            <li><a href="#sobremi" onclick="seleccionar(this)">SOBRE MI</a></li>
-                            <li><a href="#servicios" onclick="seleccionar(this)">CURSOS Y HOBBIES</a></li>
-                            <li><a href="#portfolio" onclick="seleccionar(this)">PORTFOLIO</a></li>
-                            <li><a href="#contacto" onclick="seleccionar(this)">CONTACTO</a></li>
-                        </ul>
-                    </nav>
+    <div id="particles-js"></div>
 
-                   
-                    <div id="icono-nav" onclick="responsiveMenu()">
-                        <i class="fa-solid fa-bars"></i>
-                    </div>
+    <!-- 🔥 OVERLAY AQUÍ (no dentro de presentacion) -->
+    <div class="overlay-hero"></div>
 
+    <div class="contenido">
+        <header>
+            <div class="contenido-header">
+                <h1>Portafolio</h1>
+                <nav id="nav">
+                    <ul id="links">
+                        <li><a href="#inicio" class="seleccionado" onclick="seleccionar(this)">INICIO</a></li>
+                        <li><a href="#sobremi" onclick="seleccionar(this)">SOBRE MI</a></li>
+                        <li><a href="#servicios" onclick="seleccionar(this)">CURSOS Y HOBBIES</a></li>
+                        <li><a href="#portfolio" onclick="seleccionar(this)">PORTFOLIO</a></li>
+                        
+                    </ul>
+                </nav>
 
-                    <div class="redes">
-                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-                        <a href="#"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                        <a href="#"><i class="fa-brands fa-instagram-square"></i></a>
-                    </div>
+                <div id="icono-nav" onclick="responsiveMenu()">
+                    <i class="fa-solid fa-bars"></i>
                 </div>
-            </header>
-            <div class="presentacion">
+
+                <div class="redes">
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram-square"></i></a>
+                </div>
+            </div>
+        </header>
+
+        
+        <div class="presentacion">
+            <div class="contenido-hero">
                 <p class="bienvenida">Bienvenidos</p>
-                <h2>Soy <span><h2>Samuel Galicia</h2></span></h2>
-                <p class="descripcion">Ingeniero en Sistemas | Desarrollo Web | Ciencia de Datos</p>
-                <a href="#portfolio">Ir a Portafolio</a>
+                <h2>Soy <span>Samuel Galicia</span></h2>
+                <h3>Ingeniero en Sistemas | Desarrollo Web | Ciencia de Datos</h3>
+
+                <p class="descripcion">
+                    Desarrollo soluciones tecnológicas enfocadas en sistemas web,
+                    automatización y análisis de datos.
+                </p>
+
+                <a href="#portfolio">Ver Proyectos</a>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <section id="sobremi">
 
@@ -216,8 +229,13 @@
 
     <section id="portfolio">
         <h3 class="titulo-seccion">Mis Proyectos</h3>
-        <div class="fila">
-            <div class="proyecto">
+        <div class="carousel">
+<!--  <button class="prev">&#10094;</button>-->
+    
+
+    <div class="carousel-track">
+
+        <div class="proyecto">
                 <div class="overlay"></div>
                 <img src="imagenes/incriptador.png" alt="">
                 <div class="info">
@@ -269,35 +287,86 @@
 
  <!-- BOTÓN BURBUJA -->
 <div id="chat-toggle">
-    <img src="imagenes/chatbot.gif" alt="chatbot">
+     <img src="imagenes/chatbot.gif" alt="chatbot">
+    <span class="chat-status">
+        <span class="dot"></span>
+        <span id="status-text">Estoy disponible 👀</span>
+    </span>
 </div>
 
 <!-- CHAT -->
 <div id="chatbot" class="hidden">
     <div id="chat-header">
         <span>🤖 Asistente</span>
+        <div class="status-online">
+        <span class="dot"></span>
+        <span>En línea</span>
+    </div>
         <span id="close-chat">✖</span>
     </div>
 
     <div id="chat-body"></div>
 
-    <input type="text" id="chat-input" placeholder="Escribe tu mensaje...">
+   <input id="chat-input" placeholder="Escribe aquí...">
 </div>
 
-    <footer>
-        <img class="imagen-tel" href="./img/">
-        <div class="redes">
-            <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-            <a href="#"><i class="fa-brands fa-youtube"></i></a>
-            <a href="#"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#"><i class="fa-brands fa-instagram-square"></i></a>
-        </div>
-        <p> © copyright-Samuel Galicia-2026</p>
+    <footer class="footer">
 
-    </footer>
-    
+    <div class="footer-contenido">
+
+        <!-- PERFIL -->
+        <div class="footer-col">
+            <h3>Samuel Galicia</h3>
+            <p>
+                Ingeniero en Sistemas enfocado en desarrollo web, automatización
+                y soluciones tecnológicas modernas.
+            </p>
+        </div>
+
+        <!-- ENLACES -->
+        <div class="footer-col">
+            <h4>Explorar</h4>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#sobremi">Sobre mí</a></li>
+                <li><a href="#portfolio">Proyectos</a></li>
+                
+            </ul>
+        </div>
+
+        <!-- CONTACTO -->
+        <div class="footer-col">
+            <h4>Contacto</h4>
+            <p>Escribeme por chatbot</p>
+            <p>El Salvador</p>
+
+            <div class="footer-redes">
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#"><i class="fa-brands fa-github"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BOTÓN SUBIR 
+    <button id="btnTop"><i class="fa-solid fa-arrow-up"></i></button>
+-->
+    <div class="footer-bottom">
+        <p>© 2026 Samuel Galicia | Portafolio Profesional</p>
+    </div>
+
+</footer>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
     <script src="script.js"></script>
+
+    <div id="modal" class="modal">
+    <span class="cerrar" onclick="cerrarModal()">&times;</span>
+    <img id="modal-img">
+    <p id="modal-texto"></p>
+</div>
+
 </body>
 
 </html>
