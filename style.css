@@ -132,8 +132,6 @@ html {
     display: none;
 }
 
-
-
 #sobremi {
     max-width: 1100px;
     margin: auto;
@@ -340,9 +338,38 @@ html {
     background-color: #fff;
     width: 95%;
     height: 6px;
-    animation: progreso3 2s forwards;
+    animation: progreso4 2s forwards;
 }
-
+.contenedor-skills .skill .barra .barra-progreso5 {
+    background-color: #fff;
+    width: 95%;
+    height: 6px;
+    animation: progreso5 2s forwards;
+}
+.contenedor-skills .skill .barra .barra-progreso6 {
+    background-color: #fff;
+    width: 95%;
+    height: 6px;
+    animation: progreso6 2s forwards;
+}
+.contenedor-skills .skill .barra .barra-progreso7 {
+    background-color: #fff;
+    width: 95%;
+    height: 6px;
+    animation: progreso7 2s forwards;
+}
+.contenedor-skills .skill .barra .barra-progreso8 {
+    background-color: #fff;
+    width: 95%;
+    height: 6px;
+    animation: progreso8 2s forwards;
+}
+.contenedor-skills .skill .barra .barra-progreso9 {
+    background-color: #fff;
+    width: 95%;
+    height: 6px;
+    animation: progreso9 2s forwards;
+}
 @keyframes progreso1 {
     0% {
         width: 0;
@@ -381,7 +408,51 @@ html {
         width: 45%;
     }
 }
+@keyframes progreso5 {
+    0% {
+        width: 0;
+    }
 
+    100% {
+        width: 50%;
+    }
+}
+@keyframes progreso6 {
+    0% {
+        width: 0;
+    }
+
+    100% {
+        width: 55%;
+    }
+}
+@keyframes progreso7 {
+    0% {
+        width: 0;
+    }
+
+    100% {
+        width: 90%;
+    }
+}
+@keyframes progreso8 {
+    0% {
+        width: 0;
+    }
+
+    100% {
+        width: 85%;
+    }
+}
+@keyframes progreso9 {
+    0% {
+        width: 0;
+    }
+
+    100% {
+        width: 90%;
+    }
+}
 #portfolio {
     max-width: 1100px;
     padding: 100px 0;
@@ -520,7 +591,118 @@ footer a {
     font-size: 26px;
 }
 
+/* ===== CHATBOT CONTENEDOR ===== */
+#chatbot {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 300px;
+    background: #111;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+    transform: translateY(20px);
+    opacity: 0;
+    z-index: 999;
+}
 
+/* ACTIVO */
+#chatbot.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* OCULTO */
+.hidden {
+    display: none;
+}
+
+/* HEADER */
+#chat-header {
+    background: #58e4f7;
+    color: #000;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#chat-header span {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 5px;
+}
+
+#chat-header span:hover {
+    background: rgba(0,0,0,0.2);
+}
+
+/* CUERPO */
+#chat-body {
+    height: 250px;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* INPUT */
+#chat-input {
+    width: 100%;
+    border: none;
+    padding: 10px;
+    outline: none;
+}
+
+/* MENSAJES */
+.msg-user, .msg-bot {
+    padding: 8px 12px;
+    margin: 6px 0;
+    border-radius: 15px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.msg-user {
+    background: #58e4f7;
+    color: #000;
+    align-self: flex-end;
+}
+
+.msg-bot {
+    background: #222;
+    color: #fff;
+    align-self: flex-start;
+}
+
+/* ESCRIBIENDO */
+.typing {
+    font-size: 12px;
+    opacity: 0.7;
+    font-style: italic;
+}
+
+/* ===== BURBUJA ===== */
+#chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+#chat-toggle img {
+    width: 65px;
+    animation: flotar 2s infinite ease-in-out;
+}
+
+@keyframes flotar {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0); }
+}
 @media screen and (max-width: 800px) {
     .redes {
         display: none;
@@ -623,4 +805,7 @@ footer a {
         width: 100%;
         margin-bottom: 15px;
     }
+    .barra-progreso5 { animation: progreso5 2s forwards; }
+
+
 }
