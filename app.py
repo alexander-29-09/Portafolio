@@ -33,7 +33,7 @@ def contact():
 
         params = {
             "from": "onboarding@resend.dev",  # puedes cambiar luego
-            "to": ["helpdesk.unab@gmail.com"],
+            "to": ["samuelalexandergalicia@outlook.es"],
             "subject": "Nuevo mensaje desde portafolio",
             "html": contenido
         }
