@@ -1,280 +1,128 @@
+document.addEventListener("DOMContentLoaded", function () {
 
+// ================= NAV =================
 function seleccionar(link) {
-    var opciones = document.querySelectorAll('#links  a');
-    opciones[0].className = "";
-    opciones[1].className = "";
-    opciones[2].className = "";
-    opciones[3].className = "";
-    opciones[4].className = "";
+    const opciones = document.querySelectorAll('#links a');
+    opciones.forEach(op => op.className = "");
     link.className = "seleccionado";
 
-    
-    var x = document.getElementById("nav");
-    x.className = "";
+    const nav = document.getElementById("nav");
+    if (nav) nav.className = "";
 }
 
 function responsiveMenu() {
-    var x = document.getElementById("nav");
-    if (x.className === "") {
-        x.className = "responsive";
-    } else {
-        x.className = "";
-    }
+    const nav = document.getElementById("nav");
+    if (!nav) return;
+    nav.className = nav.className === "" ? "responsive" : "";
 }
 
-
-window.onscroll = function() { efectoHabilidades() };
-
+// ================= SKILLS =================
+window.onscroll = () => efectoHabilidades();
 
 function efectoHabilidades() {
-    var skills = document.getElementById("skills");
-    var distancia_skills = window.innerHeight - skills.getBoundingClientRect().top;
-    if (distancia_skills >= 300) {
-        document.getElementById("html").classList.add("barra-progreso1");
-        document.getElementById("js").classList.add("barra-progreso2");
-        document.getElementById("C#").classList.add("barra-progreso3");
-        document.getElementById("DB").classList.add("barra-progreso4");
-        document.getElementById("net").classList.add("barra-progreso5");
-        document.getElementById("redes").classList.add("barra-progreso6");
-        document.getElementById("puntualidad").classList.add("barra-progreso7");
-        document.getElementById("equipo").classList.add("barra-progreso8");
-        document.getElementById("responsabilidad").classList.add("barra-progreso9");
-    }
+    const skills = document.getElementById("skills");
+    if (!skills) return;
 
+    const distancia = window.innerHeight - skills.getBoundingClientRect().top;
+
+    if (distancia >= 300) {
+        document.getElementById("html")?.classList.add("barra-progreso1");
+        document.getElementById("js")?.classList.add("barra-progreso2");
+        document.getElementById("C#")?.classList.add("barra-progreso3");
+        document.getElementById("DB")?.classList.add("barra-progreso4");
+        document.getElementById("net")?.classList.add("barra-progreso5");
+        document.getElementById("redes")?.classList.add("barra-progreso6");
+        document.getElementById("puntualidad")?.classList.add("barra-progreso7");
+        document.getElementById("equipo")?.classList.add("barra-progreso8");
+        document.getElementById("responsabilidad")?.classList.add("barra-progreso9");
+    }
 }
-//efecto de particulas
-particlesJS("particles-js", {
-  particles: {
-    number: {
-      value: 60
-    },
-    color: {
-      value: "#58e4f7"
-    },
-    shape: {
-      type: "circle"
-    },
-    opacity: {
-      value: 0.5
-    },
-    size: {
-      value: 3
-    },
-    line_linked: {
-      enable: true,
-      distance: 150,
-      color: "#58e4f7",
-      opacity: 0.4,
-      width: 1
-    },
-    move: {
-      enable: true,
-      speed: 2
-    }
-  },
-  interactivity: {
-    events: {
-      onhover: {
-        enable: true,
-        mode: "repulse"
-      }
-    }
-  }
-});
 
-// Carrusel de proyectos
+// ================= PARTICULAS =================
+if (typeof particlesJS !== "undefined") {
+    particlesJS("particles-js", {
+        particles: {
+            number: { value: 60 },
+            color: { value: "#58e4f7" },
+            shape: { type: "circle" },
+            opacity: { value: 0.5 },
+            size: { value: 3 },
+            line_linked: {
+                enable: true,
+                distance: 150,
+                color: "#58e4f7",
+                opacity: 0.4,
+                width: 1
+            },
+            move: { enable: true, speed: 2 }
+        }
+    });
+}
+
+// ================= CARRUSEL =================
 let index = 0;
 let autoScroll;
 
 const track = document.querySelector(".carousel-track");
 let items = document.querySelectorAll(".proyecto");
 
-// duplicar para efecto infinito
-track.innerHTML += track.innerHTML;
-items = document.querySelectorAll(".proyecto");
+if (track && items.length > 0) {
 
-function actualizarCarrusel() {
-    const itemWidth = items[0].offsetWidth + 20;
-    const offset = index * itemWidth;
+    track.innerHTML += track.innerHTML;
+    items = document.querySelectorAll(".proyecto");
 
-    track.style.transform = `translateX(-${offset}px)`;
+    function actualizarCarrusel() {
+        const itemWidth = items[0].offsetWidth + 20;
+        const offset = index * itemWidth;
 
-    // quitar active
-    items.forEach(el => el.classList.remove("active"));
+        track.style.transform = `translateX(-${offset}px)`;
 
-    // activar el actual
-    items[index].classList.add("active");
-}
+        items.forEach(el => el.classList.remove("active"));
+        items[index]?.classList.add("active");
+    }
 
-// AUTO SCROLL SUAVE
-function iniciarAutoScroll() {
-    autoScroll = setInterval(() => {
-        index++;
+    function iniciarAutoScroll() {
+        autoScroll = setInterval(() => {
+            index++;
 
-        if (index >= items.length / 2) {
-            index = 0;
-            track.style.transition = "none";
-            track.style.transform = "translateX(0)";
-            setTimeout(() => {
-                track.style.transition = "transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)";
-            }, 50);
-        }
+            if (index >= items.length / 2) {
+                index = 0;
+                track.style.transition = "none";
+                track.style.transform = "translateX(0)";
+                setTimeout(() => {
+                    track.style.transition = "transform 0.8s";
+                }, 50);
+            }
 
-        actualizarCarrusel();
-    }, 3000);
-}
+            actualizarCarrusel();
+        }, 3000);
+    }
 
-// PAUSA
-function detenerAutoScroll() {
-    clearInterval(autoScroll);
-}
+    function detenerAutoScroll() {
+        clearInterval(autoScroll);
+    }
 
-const carousel = document.querySelector(".carousel");
+    const carousel = document.querySelector(".carousel");
 
-carousel.addEventListener("mouseenter", detenerAutoScroll);
-carousel.addEventListener("mouseleave", iniciarAutoScroll);
-
-// TOUCH (SWIPE)
-let startX = 0;
-
-carousel.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-    detenerAutoScroll();
-});
-
-carousel.addEventListener("touchend", (e) => {
-    let endX = e.changedTouches[0].clientX;
-
-    if (startX - endX > 50) {
-        index++;
-    } else if (endX - startX > 50) {
-        index--;
+    if (carousel) {
+        carousel.addEventListener("mouseenter", detenerAutoScroll);
+        carousel.addEventListener("mouseleave", iniciarAutoScroll);
     }
 
     actualizarCarrusel();
     iniciarAutoScroll();
-});
+}
 
-// INIT
-actualizarCarrusel();
-iniciarAutoScroll();
-//Chatbot
+// ================= CHATBOT =================
 let estado = "inicio";
 let datos = {};
 let historial = [];
 
-// ===== TOGGLE  =====
-function toggleChat(){
-    const chat = document.getElementById("chatbot");
-    chat.classList.toggle("hidden");
-    chat.classList.toggle("active");
-}
-const chat = document.getElementById("chatbot");
+let chatAbierto = false;
+let animandoChat = false;
+let primeraApertura = true;
 
-
-
-
-// ===== SONIDO =====
-const sonido = new Audio("audio/button-09a.mp3");
-sonido.volume = 0.03;
-
-// ===== AUTO SCROLL =====
-function scrollChat(){
-    const chat = document.getElementById("chat-body");
-    chat.scrollTop = chat.scrollHeight;
-}
-
-
-// ===== MENSAJES =====
-function userMsg(text){
-    let chat = document.getElementById("chat-body");
-
-    let msg = document.createElement("div");
-    msg.className = "msg-user";
-    msg.innerText = text;
-
-    chat.appendChild(msg);
-   // sonido.play().catch(()=>{});
-    chat.scrollTop = chat.scrollHeight;
-}
-/*
-function guardarChat() {
-    localStorage.setItem("chatHistorial", document.getElementById("chat-body").innerHTML);
-}*/
-function botMsg(text){
-     let chat = document.getElementById("chat-body");
-
-    let msg = document.createElement("div");
-    msg.className = "msg-bot";
-    msg.innerHTML = text;
-
-    chat.appendChild(msg);
-    
-    chat.scrollTop = chat.scrollHeight;
-
-    // solo si el chat está abierto
-    if (chatAbierto) {
-        sonido.play().catch(()=>{});
-    }
-}
-/*window.onload = function () {
-    const historial = localStorage.getItem("chatHistorial");
-    if (historial) {
-        document.getElementById("chat-body").innerHTML = historial;
-    }
-};*/
-// ===== INDICADOR ESCRIBIENDO =====
-const typingSound = new Audio("audio/escritura.mp3");
-function typing(){
-    let chat = document.getElementById("chat-body");
-
-    let msg = document.createElement("div");
-    msg.className = "msg-bot typing";
-    msg.id = "typing";
-    msg.innerText = "Escribiendo...";
-
-    chat.appendChild(msg);
-    typingSound.loop = true;
-    typingSound.play().catch(()=>{});
-
-    chat.scrollTop = chat.scrollHeight;
-}
-
-function removeTyping(){
-    let t = document.getElementById("typing");
-    if(t) t.remove();
-    typingSound.pause();
-    typingSound.currentTime = 0;
-}
-
-// ===== IA SIMULADA =====
-
-
-
-
-// INPUT
-document.getElementById("chat-input").addEventListener("keydown", function(e){
-
-    if(e.key === "Enter" && !e.shiftKey){
-        e.preventDefault();
-
-        let msg = this.value.trim();
-        if(msg === "") return;
-
-        this.value = "";
-
-        userMsg(msg);
-        historial.push({user: msg});
-
-        typing();
-
-        setTimeout(()=>{
-            removeTyping();
-            responder(msg.toLowerCase());
-        }, 800);
-    }
-});
-
+// ===== PERFIL =====
 const perfil = {
     nombre: "Samuel Galicia",
 
@@ -324,57 +172,141 @@ const perfil = {
     ]
 };
 
-//ocultar estado de chat al dar click 
-const toggle = document.getElementById("chat-toggle");
-let chatAbierto = false;
-let animandoChat = false;
+// ===== ELEMENTOS =====
+const chat = document.getElementById("chatbot");
+const toggleBtn = document.getElementById("chat-toggle");
+const closeBtn = document.getElementById("close-chat");
+const status = document.querySelector(".chat-status");
 
-let primeraApertura = true;
+// ===== SONIDO =====
+const sonido = new Audio("audio/button-09a.mp3");
+sonido.volume = 0.03;
 
-document.getElementById("chat-toggle").onclick = function () {
+// ===== MENSAJES =====
+function userMsg(text){
+    const chatBody = document.getElementById("chat-body");
+    if (!chatBody) return;
 
-    if (animandoChat) return; // vita doble click
+    const msg = document.createElement("div");
+    msg.className = "msg-user";
+    msg.innerText = text;
 
-    const chat = document.getElementById("chatbot");
-    const status = document.querySelector(".chat-status");
+    chatBody.appendChild(msg);
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
 
-    animandoChat = true;
+function botMsg(text){
+    const chatBody = document.getElementById("chat-body");
+    if (!chatBody) return;
 
-    if (!chatAbierto) {
-        // ABRIR
-        chat.classList.remove("hidden");
+    const msg = document.createElement("div");
+    msg.className = "msg-bot";
+    msg.innerHTML = text;
 
-        setTimeout(() => {
-            chat.classList.add("active");
-            animandoChat = false;
-        }, 10);
+    chatBody.appendChild(msg);
+    chatBody.scrollTop = chatBody.scrollHeight;
 
-        status.style.display = "none";
+    if (chatAbierto) sonido.play().catch(()=>{});
+}
 
-        chatAbierto = true;
+// ===== TYPING =====
+const typingSound = new Audio("audio/escritura.mp3");
 
-        if (primeraApertura) {
+function typing(){
+    const chatBody = document.getElementById("chat-body");
+    if (!chatBody) return;
+
+    const msg = document.createElement("div");
+    msg.className = "msg-bot typing";
+    msg.id = "typing";
+    msg.innerText = "Escribiendo...";
+
+    chatBody.appendChild(msg);
+
+    typingSound.loop = true;
+    typingSound.play().catch(()=>{});
+
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function removeTyping(){
+    document.getElementById("typing")?.remove();
+    typingSound.pause();
+    typingSound.currentTime = 0;
+}
+
+// ===== TOGGLE CHAT =====
+if (toggleBtn) {
+    toggleBtn.onclick = function () {
+
+        if (animandoChat) return;
+
+        animandoChat = true;
+
+        if (!chatAbierto) {
+            chat.classList.remove("hidden");
+
             setTimeout(() => {
-                botMsg("¡Hola! 👋 Soy Criss, el asistente de Samuel 🤖<br> dime en qué puedo ayudarte, Puedo ayudarte con:<br><br>💼 Experiencia<br>🧠 Habilidades<br>📊 Estudios<br>📩 Contacto<br><br>Solo dime 👇 ");
-            }, 800);
+                chat.classList.add("active");
+                animandoChat = false;
+            }, 10);
 
-            primeraApertura = false;
+            if (status) status.style.display = "none";
+
+            chatAbierto = true;
+
+            if (primeraApertura) {
+                setTimeout(() => {
+                    botMsg("¡Hola! 👋 Soy Criss 🤖<br>, el asistente virtual de Samuela ¿Qué deseas saber?");
+                }, 800);
+                primeraApertura = false;
+            }
+
+        } else {
+            chat.classList.remove("active");
+
+            setTimeout(() => {
+                chat.classList.add("hidden");
+                animandoChat = false;
+            }, 300);
+
+            if (status) status.style.display = "flex";
+
+            chatAbierto = false;
         }
+    };
+}
 
-    } else {
-        // CERRAR
-        chat.classList.remove("active");
+// ===== CLOSE CHAT =====
+if (closeBtn && toggleBtn) {
+    closeBtn.onclick = () => toggleBtn.click();
+}
 
-        setTimeout(() => {
-            chat.classList.add("hidden");
-            animandoChat = false;
-        }, 300);
+// ===== INPUT =====
+const input = document.getElementById("chat-input");
 
-        status.style.display = "flex";
+if (input) {
+    input.addEventListener("keydown", function (e) {
 
-        chatAbierto = false;
-    }
-};
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+
+            const msg = this.value.trim();
+            if (!msg) return;
+
+            this.value = "";
+
+            userMsg(msg);
+            typing();
+
+            setTimeout(() => {
+                removeTyping();
+                responder(msg.toLowerCase());
+            }, 800);
+        }
+    });
+}
+
 // ===== RESPUESTAS =====
 function responder(msg){
 
@@ -436,71 +368,69 @@ function responder(msg){
     }
 
     if(estado === "mensaje"){
-    datos.mensaje = msg;
+        datos.mensaje = msg;
 
-    botMsg("📩 Enviando mensaje...");
+        botMsg("📩 Enviando...");
 
-    fetch("https://portafolio-ebt4.onrender.com/contact", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(datos)
-    })
-    .then(res => res.json())
-    .then(data => {
-        if(data.status === "ok"){
-            botMsg("🔥 Mensaje enviado correctamente.<br>Samuel te responderá pronto 📩");
-        } else {
-            botMsg("❌ Hubo un problema al enviar el mensaje, puedes enviar un correo directo a samuelalexandergalicia@outlook.es");
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        botMsg("⚠️ Error de conexión con el servidor, por favor intentalo mas tarde o envia un correo directo a samuelalexandergalicia@outlook.es ");
-    });
+        fetch("https://portafolio-ebt4.onrender.com/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(datos)
+        })
+        .then(async res => {
+            const data = await res.json().catch(()=> ({}));
+            if (!res.ok) throw new Error(data.error || "Error servidor");
+            return data;
+        })
+        .then(() => {
+            botMsg("🔥 Mensaje enviado correctamente");
+        })
+        .catch(err => {
+            console.error(err);
+            botMsg("⚠️ Error: " + err.message);
+        });
 
-    estado = "fin";
-    return;
-}
+        estado = "fin";
+        return;
+    }
+
 
     botMsg("Interesante 🤔… puedo ayudarte mejor si me dices algo sobre experiencia, habilidades o contacto.");
 }
 
 
-
-document.getElementById("close-chat").onclick = function () {
-    document.getElementById("chat-toggle").click();
-};
-// BOTÓN VOLVER ARRIBA
+// ================= BOTÓN TOP =================
 const btnTop = document.getElementById("btnTop");
 
-window.addEventListener("scroll", () => {
-    if (window.scrollY > 300) {
-        btnTop.style.display = "block";
-    } else {
-        btnTop.style.display = "none";
-    }
-});
-
-btnTop.addEventListener("click", () => {
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+if (btnTop) {
+    window.addEventListener("scroll", () => {
+        btnTop.style.display = window.scrollY > 300 ? "block" : "none";
     });
+
+    btnTop.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+}
+
+// ================= STATUS =================
+const statusText = document.getElementById("status-text");
+
+if (statusText) {
+    const estados = [
+        "En línea",
+        "Responde en minutos",
+        "Estoy disponible 👀",
+        "¿Hablamos?",
+        "Listo para ayudarte 💬"
+    ];
+
+    let i = 0;
+
+    setInterval(() => {
+        i = (i + 1) % estados.length;
+        statusText.textContent = estados[i];
+    }, 3000);
+}
+
 });
 
-const estados = [
-    "En línea",
-    "Responde en minutos",
-    "Estoy disponible 👀",
-    "¿Hablamos?",
-    "Listo para ayudarte 💬"
-];
-
-let i = 0;
-
-setInterval(() => {
-    i = (i + 1) % estados.length;
-    document.getElementById("status-text").textContent = estados[i];
-}, 3000);
