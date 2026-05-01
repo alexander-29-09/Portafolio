@@ -170,22 +170,8 @@ function toggleChat(){
     chat.classList.toggle("active");
 }
 const chat = document.getElementById("chatbot");
-// ABRIR / CERRAR (BURBUJA)
-document.getElementById("chat-toggle").onclick = function () {
-    if (chat.classList.contains("hidden")) {
-        chat.classList.remove("hidden");
-        setTimeout(() => chat.classList.add("active"), 10);
-    } else {
-        chat.classList.remove("active");
-        setTimeout(() => chat.classList.add("hidden"), 300);
-    }
-};
 
-// BOTÓN CERRAR (X)
-document.getElementById("close-chat").onclick = function () {
-    chat.classList.remove("active");
-    setTimeout(() => chat.classList.add("hidden"), 300);
-};
+
 
 
 // ===== SONIDO =====
@@ -338,6 +324,57 @@ const perfil = {
     ]
 };
 
+//ocultar estado de chat al dar click 
+const toggle = document.getElementById("chat-toggle");
+let chatAbierto = false;
+let animandoChat = false;
+
+let primeraApertura = true;
+
+document.getElementById("chat-toggle").onclick = function () {
+
+    if (animandoChat) return; // vita doble click
+
+    const chat = document.getElementById("chatbot");
+    const status = document.querySelector(".chat-status");
+
+    animandoChat = true;
+
+    if (!chatAbierto) {
+        // ABRIR
+        chat.classList.remove("hidden");
+
+        setTimeout(() => {
+            chat.classList.add("active");
+            animandoChat = false;
+        }, 10);
+
+        status.style.display = "none";
+
+        chatAbierto = true;
+
+        if (primeraApertura) {
+            setTimeout(() => {
+                botMsg("¡Hola! 👋 Soy Criss, el asistente de Samuel 🤖<br> dime en qué puedo ayudarte, Puedo ayudarte con:<br><br>💼 Experiencia<br>🧠 Habilidades<br>📊 Estudios<br>📩 Contacto<br><br>Solo dime 👇 ");
+            }, 800);
+
+            primeraApertura = false;
+        }
+
+    } else {
+        // CERRAR
+        chat.classList.remove("active");
+
+        setTimeout(() => {
+            chat.classList.add("hidden");
+            animandoChat = false;
+        }, 300);
+
+        status.style.display = "flex";
+
+        chatAbierto = false;
+    }
+};
 // ===== RESPUESTAS =====
 function responder(msg){
 
@@ -399,72 +436,38 @@ function responder(msg){
     }
 
     if(estado === "mensaje"){
-        datos.mensaje = msg;
+    datos.mensaje = msg;
 
-        botMsg("🔥 Listo, mensaje preparado:<br><br>" +
-            `<b>Nombre:</b> ${datos.nombre}<br>` +
-            `<b>Email:</b> ${datos.email}<br>` +
-            `<b>Mensaje:</b> ${datos.mensaje}<br><br>` +
-            "Samuel lo recibirá pronto 📩");
+    botMsg("📩 Enviando mensaje...");
 
-        estado = "fin";
-        return;
-    }
+    fetch("https://portafolio-ebt4.onrender.com/contact", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(datos)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === "ok"){
+            botMsg("🔥 Mensaje enviado correctamente.<br>Samuel te responderá pronto 📩");
+        } else {
+            botMsg("❌ Hubo un problema al enviar el mensaje, puedes enviar un correo directo a samuelalexandergalicia@outlook.es");
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        botMsg("⚠️ Error de conexión con el servidor, por favor intentalo mas tarde o envia un correo directo a samuelalexandergalicia@outlook.es ");
+    });
+
+    estado = "fin";
+    return;
+}
 
     botMsg("Interesante 🤔… puedo ayudarte mejor si me dices algo sobre experiencia, habilidades o contacto.");
 }
 
-//ocultar estado de chat al dar click 
-const toggle = document.getElementById("chat-toggle");
-let chatAbierto = false;
-let animandoChat = false;
 
-let primeraApertura = true;
-
-document.getElementById("chat-toggle").onclick = function () {
-
-    if (animandoChat) return; // vita doble click
-
-    const chat = document.getElementById("chatbot");
-    const status = document.querySelector(".chat-status");
-
-    animandoChat = true;
-
-    if (!chatAbierto) {
-        // ABRIR
-        chat.classList.remove("hidden");
-
-        setTimeout(() => {
-            chat.classList.add("active");
-            animandoChat = false;
-        }, 10);
-
-        status.style.display = "none";
-
-        chatAbierto = true;
-
-        if (primeraApertura) {
-            setTimeout(() => {
-                botMsg("¡Hola! 👋 Soy Criss, el asistente de Samuel 🤖<br> dime en qué puedo ayudarte 💻 o escribe *contacto* 📩");
-            }, 800);
-
-            primeraApertura = false;
-        }
-
-    } else {
-        // CERRAR
-        chat.classList.remove("active");
-
-        setTimeout(() => {
-            chat.classList.add("hidden");
-            animandoChat = false;
-        }, 300);
-
-        status.style.display = "flex";
-
-        chatAbierto = false;
-    }
-};
 
 document.getElementById("close-chat").onclick = function () {
     document.getElementById("chat-toggle").click();
