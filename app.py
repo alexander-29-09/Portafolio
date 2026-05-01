@@ -1,12 +1,15 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import smtplib
-from email.mime.text import MIMEText
+import resend
+import os
 
 app = Flask(__name__)
 
+# 🔥 CORS (IMPORTANTE)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-CORS(app, origins=["https://alexander-29-09.github.io"])# Permite conexión desde el frontend
+# 🔐 API KEY desde variables de entorno
+resend.api_key = os.environ.get("RESEND_API_KEY")
 
 @app.route('/contact', methods=['POST'])
 def contact():
@@ -17,39 +20,37 @@ def contact():
         email = data.get('email')
         mensaje = data.get('mensaje')
 
-        # Validación básica
         if not nombre or not email or not mensaje:
             return jsonify({"error": "Faltan datos"}), 400
 
-        # Contenido del correo
+        # 📩 Contenido del correo
         contenido = f"""
-        Nuevo contacto desde tu portafolio:
+        <h2>Nuevo mensaje desde tu portafolio</h2>
+        <p><b>Nombre:</b> {nombre}</p>
+        <p><b>Email:</b> {email}</p>
+        <p><b>Mensaje:</b><br>{mensaje}</p>
+        """
 
-        Nombre: {nombre}
-        Correo: {email}
-        Mensaje:
-        {mensaje}
-                    """
+        params = {
+            "from": "onboarding@resend.dev",  # puedes cambiar luego
+            "to": ["helpdesk.unab@gmail.com"],
+            "subject": "Nuevo mensaje desde portafolio",
+            "html": contenido
+        }
 
-        msg = MIMEText(contenido)
-        msg['Subject'] = 'Nuevo mensaje desde portafolio'
-        msg['From'] = "helpdesk.unab@gmail.com"
-        msg['To'] = "helpdesk.unab@gmail.com"
+        resend.Emails.send(params)
 
-        # Enviar correo
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 587)
-        server.login("helpdesk.unab@gmail.com", "uxcrmjeveduutwqp")
-        server.send_message(msg)
-        server.quit()
-
-        return jsonify({"status": "ok", "message": "Correo enviado correctamente"})
+        return jsonify({"status": "ok", "message": "Correo enviado"})
 
     except Exception as e:
-        print("ERROR REAL:", str(e))
-    return jsonify({"error": str(e)}), 500
+        print("ERROR:", str(e))
+        return jsonify({"error": str(e)}), 500
 
 
-
+# 🔥 Ruta test (opcional)
+@app.route('/')
+def home():
+    return "API funcionando 🚀"
 
 
 if __name__ == '__main__':
