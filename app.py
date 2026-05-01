@@ -4,7 +4,9 @@ import smtplib
 from email.mime.text import MIMEText
 
 app = Flask(__name__)
-CORS(app)  # Permite conexión desde el frontend
+
+
+CORS(app, resources={r"/*": {"origins": "*"}})# Permite conexión desde el frontend
 
 @app.route('/contact', methods=['POST'])
 def contact():
@@ -43,13 +45,11 @@ Mensaje:
         return jsonify({"status": "ok", "message": "Correo enviado correctamente"})
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print("ERROR REAL:", str(e))
+    return jsonify({"error": str(e)}), 500
 
 
-# Ruta de prueba 
-@app.route('/')
-def home():
-    return "Backend funcionando 🚀"
+
 
 
 if __name__ == '__main__':
