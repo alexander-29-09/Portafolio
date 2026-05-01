@@ -6,7 +6,7 @@ from email.mime.text import MIMEText
 app = Flask(__name__)
 
 
-CORS(app, resources={r"/*": {"origins": "*"}})# Permite conexión desde el frontend
+CORS(app, origins=["https://alexander-29-09.github.io"])# Permite conexión desde el frontend
 
 @app.route('/contact', methods=['POST'])
 def contact():
@@ -23,13 +23,13 @@ def contact():
 
         # Contenido del correo
         contenido = f"""
-Nuevo contacto desde tu portafolio:
+        Nuevo contacto desde tu portafolio:
 
-Nombre: {nombre}
-Correo: {email}
-Mensaje:
-{mensaje}
-"""
+        Nombre: {nombre}
+        Correo: {email}
+        Mensaje:
+        {mensaje}
+                    """
 
         msg = MIMEText(contenido)
         msg['Subject'] = 'Nuevo mensaje desde portafolio'
@@ -37,7 +37,7 @@ Mensaje:
         msg['To'] = "helpdesk.unab@gmail.com"
 
         # Enviar correo
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+        server = smtplib.SMTP_SSL('smtp.gmail.com', 587)
         server.login("helpdesk.unab@gmail.com", "uxcrmjeveduutwqp")
         server.send_message(msg)
         server.quit()
