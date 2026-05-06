@@ -287,27 +287,29 @@
 
  <!-- BOTÓN BURBUJA -->
 <div id="chat-toggle">
-     <img src="imagenes/chatbot.gif" alt="chatbot">
+    <img src="imagenes/chatbot.gif" alt="chatbot">
     <span class="chat-status">
         <span class="dot"></span>
         <span id="status-text">Estoy disponible 👀</span>
     </span>
-</div>
-
-<!-- CHAT -->
+</div><!-- CHAT -->
 <div id="chatbot" class="hidden">
+    
     <div id="chat-header">
         <span>🤖 Asistente</span>
+
         <div class="status-online">
-        <span class="dot"></span>
-        <span>En línea</span>
-    </div>
+            <span class="dot"></span>
+            <span>En línea</span>
+        </div>
+
         <span id="close-chat">✖</span>
     </div>
 
+    <!--  -->
     <div id="chat-body"></div>
 
-   <input id="chat-input" placeholder="Escribe aquí...">
+    <input id="chat-input" placeholder="Escribe aquí...">
 </div>
 
     <footer class="footer">
@@ -359,7 +361,9 @@
 </footer>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
-    <script src="script.js"></script>
+    <script type="module" src="chatbot.js"></script>
+
+    <script src="chatbot.js"></script>
 
     <div id="modal" class="modal">
     <span class="cerrar" onclick="cerrarModal()">&times;</span>

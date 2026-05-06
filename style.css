@@ -1050,6 +1050,54 @@ estilo anterior
     50% { transform: translateY(-8px); }
     100% { transform: translateY(0); }
 }
+
+.quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.quick-actions button {
+    background: #1e293b;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.quick-actions button:hover {
+    background: #38bdf8;
+}
+
+.typing {
+    font-style: italic;
+    opacity: 0.7;
+}
+/* BOTONES DENTRO DEL CHAT */
+.opciones {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.opciones button {
+    background: #58e4f7;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: 0.3s;
+}
+
+.opciones button:hover {
+    background: #00c3d6;
+    transform: scale(1.05);
+}
 /* ===== CARRUSEL ===== */
 
 
@@ -1132,6 +1180,20 @@ estilo anterior
     border-radius: 12px;
 }
 
+.btn-cv {
+    display: inline-block;
+    padding: 10px 15px;
+    background: #00bcd4;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-cv:hover {
+    background: #0097a7;
+}
 /* efecto */
 .proyecto.active {
     transform: scale(1.05);
