@@ -1,0 +1,253 @@
+/* ===== CHATBOT CONTENEDOR ===== */
+#chatbot {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 300px;
+    background: #a1caba;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+    transform: translateY(20px);
+    opacity: 0;
+    z-index: 999;
+}
+
+/* ACTIVO */
+#chatbot.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* OCULTO */
+.hidden {
+    display: none;
+}
+
+/* HEADER */
+#chat-header {
+    background: #0daabe;
+    color: #e9e9e9;
+    padding: 09px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#chat-header span {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 5px;
+}
+
+#chat-header span:hover {
+    background: rgba(54, 53, 53, 0.2);
+}
+
+/* CUERPO */
+#chat-body {
+    height: 250px;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* INPUT */
+#chat-input {
+    width: 100%;
+    border: none;
+    padding: 10px;
+    outline: none;
+}
+
+/* MENSAJES */
+.msg-user, .msg-bot {
+    padding: 8px 12px;
+    margin: 6px 0;
+    border-radius: 15px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.msg-user {
+    background: #58e4f7;
+    color: #474646;
+    align-self: flex-end;
+}
+
+.msg-bot {
+    background: #222;
+    color: #fff;
+    align-self: flex-start;
+}
+
+/* ESCRIBIENDO */
+.typing {
+    font-size: 12px;
+    opacity: 0.7;
+    font-style: italic;
+}
+
+/* ===== BURBUJA ===== */
+#chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+#chat-toggle img {
+    width: 65px;
+    animation: flotar 2s infinite ease-in-out;
+}
+
+
+
+/* CONTENEDOR */
+#chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* IMAGEN */
+#chat-toggle img {
+    width: 70px;
+    animation: flotar 2s infinite ease-in-out;
+}
+
+/* BURBUJA TEXTO */
+.chat-status {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #fff;
+
+    background: rgba(0,0,0,0.75);
+    padding: 6px 12px;
+    border-radius: 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    box-shadow: 0 0 10px rgba(88,228,247,0.4);
+}
+#chat-body {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.msg-user, .msg-bot {
+    padding: 10px 14px;
+    margin: 6px 0;
+    border-radius: 18px;
+    max-width: 75%;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.msg-user {
+    background: #176652;
+    color: #f7f7f7;
+    align-self: flex-end;
+}
+
+.msg-bot {
+    background: #444343;
+    color: #fff;
+    align-self: flex-start;
+}
+.status-online {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+}
+
+.status-online .dot {
+    width: 8px;
+    height: 8px;
+    background: #00ff88;
+    border-radius: 50%;
+}
+/* PUNTO VERDE */
+.dot {
+    width: 8px;
+    height: 8px;
+    background: #00ff88;
+    border-radius: 50%;
+    animation: blink 1.2s infinite;
+}
+
+/* PARPADEO */
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+/* FLOTAR */
+@keyframes flotar {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0); }
+}
+
+.quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.quick-actions button {
+    background: #1e293b;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.quick-actions button:hover {
+    background: #38bdf8;
+}
+
+.typing {
+    font-style: italic;
+    opacity: 0.7;
+}
+/* BOTONES DENTRO DEL CHAT */
+.opciones {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.opciones button {
+    background: #58e4f7;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: 0.3s;
+}
+
+.opciones button:hover {
+    background: #00c3d6;
+    transform: scale(1.05);
+}

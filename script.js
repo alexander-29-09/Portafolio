@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // ================= NAV =================
-function seleccionar(link) {
+window.seleccionar = function(link) {
     const opciones = document.querySelectorAll('#links a');
     opciones.forEach(op => op.className = "");
     link.className = "seleccionado";
@@ -12,7 +12,7 @@ function seleccionar(link) {
     if (nav) nav.className = "";
 }
 
-function responsiveMenu() {
+window.responsiveMenu = function() {
     const nav = document.getElementById("nav");
     if (!nav) return;
     nav.className = nav.className === "" ? "responsive" : "";
@@ -61,6 +61,7 @@ if (typeof particlesJS !== "undefined") {
     });
 }
 
+
 // ================= CARRUSEL =================
 let index = 0;
 let autoScroll;
@@ -70,33 +71,57 @@ let items = document.querySelectorAll(".proyecto");
 
 if (track && items.length > 0) {
 
+    // duplicar elementos
     track.innerHTML += track.innerHTML;
+
+    // volver a obtener elementos
     items = document.querySelectorAll(".proyecto");
 
+    // transición inicial
+    track.style.transition = "transform 0.8s ease";
+
     function actualizarCarrusel() {
-        const itemWidth = items[0].offsetWidth + 20;
-        const offset = index * itemWidth;
+
+        const itemWidth = items[0].getBoundingClientRect().width;
+
+        // GAP DEL CSS
+        const gap = 20;
+
+        const offset = index * (itemWidth + gap);
 
         track.style.transform = `translateX(-${offset}px)`;
 
+        // efecto activo
         items.forEach(el => el.classList.remove("active"));
-        items[index]?.classList.add("active");
+
+        if(items[index]){
+            items[index].classList.add("active");
+        }
     }
 
     function iniciarAutoScroll() {
+
         autoScroll = setInterval(() => {
+
             index++;
 
+            // reset infinito
             if (index >= items.length / 2) {
+
                 index = 0;
+
                 track.style.transition = "none";
                 track.style.transform = "translateX(0)";
+
                 setTimeout(() => {
-                    track.style.transition = "transform 0.8s";
+                    track.style.transition = "transform 0.8s ease";
                 }, 50);
             }
 
-            actualizarCarrusel();
+            requestAnimationFrame(() => {
+                actualizarCarrusel();
+            });
+
         }, 3000);
     }
 
@@ -114,6 +139,93 @@ if (track && items.length > 0) {
     actualizarCarrusel();
     iniciarAutoScroll();
 }
+
+const modal = document.getElementById("modal");
+const modalContent = document.getElementById("modal-content");
+const cerrar = document.querySelector(".cerrar");
+
+document.querySelectorAll(".proyecto").forEach(card => {
+
+    card.addEventListener("click", () => {
+
+        const img = card.querySelector("img");
+        const video = card.querySelector("video");
+        const iframe = card.querySelector("iframe");
+
+        modalContent.innerHTML = "";
+
+        if(img){
+
+            modalContent.innerHTML =
+                `<img src="${img.src}">`;
+
+        }
+
+        if(video){
+
+            modalContent.innerHTML =
+                `<video controls autoplay>
+                    <source src="${video.querySelector("source").src}">
+                </video>`;
+        }
+
+        if(iframe){
+
+            modalContent.innerHTML =
+                `<iframe
+                    src="${iframe.src}"
+                    allowfullscreen>
+                </iframe>`;
+        }
+
+        modal.classList.add("active");
+    });
+});
+
+cerrar.addEventListener("click", () => {
+    modal.classList.remove("active");
+});
+
+modal.addEventListener("click", e => {
+    if(e.target === modal){
+        modal.classList.remove("active");
+    }
+});
+
+let isDown = false;
+let startX;
+let scrollLeft;
+
+const carousel = document.querySelector(".carousel");
+
+carousel.addEventListener("mousedown", e => {
+
+    isDown = true;
+
+    startX = e.pageX - carousel.offsetLeft;
+    scrollLeft = carousel.scrollLeft;
+});
+
+carousel.addEventListener("mouseleave", () => {
+    isDown = false;
+});
+
+carousel.addEventListener("mouseup", () => {
+    isDown = false;
+});
+
+carousel.addEventListener("mousemove", e => {
+
+    if(!isDown) return;
+
+    e.preventDefault();
+
+    const x = e.pageX - carousel.offsetLeft;
+
+    const walk = (x - startX) * 2;
+
+    carousel.scrollLeft = scrollLeft - walk;
+});
 
 });
 

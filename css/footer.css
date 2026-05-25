@@ -1,0 +1,141 @@
+/* ===== FOOTER  ===== */
+.footer {
+    position: relative;
+    background: rgba(10, 10, 10, 0.9);
+    backdrop-filter: blur(10px);
+    color: #ccc;
+    padding: 70px 20px 30px;
+    overflow: hidden;
+}
+
+/* EFECTO LUZ */
+.footer::before {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: #58e4f7;
+    filter: blur(120px);
+    top: -100px;
+    left: -100px;
+    opacity: 0.2;
+}
+
+/* CONTENEDOR */
+.footer-contenido {
+    max-width: 1100px;
+    margin: auto;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+
+    position: relative;
+    z-index: 2;
+}
+
+/* COLUMNAS */
+.footer-col h3,
+.footer-col h4 {
+    color: #58e4f7;
+    margin-bottom: 15px;
+}
+
+/* EFECTO GLOW */
+.footer-col h3 {
+    text-shadow: 0 0 15px rgba(88,228,247,0.6);
+}
+
+.footer-col p {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* LINKS */
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col ul li {
+    margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+    color: #ccc;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-col ul li a:hover {
+    color: #58e4f7;
+    padding-left: 5px;
+}
+
+/* REDES */
+.footer-redes a {
+    color: #ccc;
+    margin-right: 12px;
+    font-size: 20px;
+    transition: 0.3s;
+}
+
+.footer-redes a:hover {
+    color: #58e4f7;
+    transform: scale(1.2);
+    text-shadow: 0 0 10px #58e4f7;
+}
+
+/* BOTÓN SUBIR */
+#btnTop {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+
+    background: #58e4f7;
+    color: #000;
+
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+
+    cursor: pointer;
+    font-size: 18px;
+
+    display: none;
+    z-index: 999;
+
+    transition: 0.3s;
+}
+
+#btnTop:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px #58e4f7;
+}
+
+/* LINEA FINAL */
+.footer-bottom {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 20px;
+
+    border-top: 1px solid #222;
+    font-size: 13px;
+    color: #888;
+}
+
+/* ANIMACIÓN APARICIÓN */
+.footer {
+    animation: fadeUp 1s ease;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

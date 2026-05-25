@@ -1,0 +1,232 @@
+/* ===== CARRUSEL ===== */
+
+
+/* BOTONES */
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #58e4f7;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.prev { left: 0; }
+.next { right: 0; }
+
+/* ===== MODAL ===== */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    padding-top: 80px;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    text-align: center;
+}
+
+.modal img {
+    max-width: 80%;
+    border-radius: 10px;
+}
+
+.modal p {
+    color: #fff;
+    margin-top: 15px;
+}
+
+.cerrar {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #fff;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+/* CONTENEDOR */
+.carousel {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.8s ease;
+    will-change: transform;
+}
+
+
+
+
+/* TRACK */
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ITEMS */
+.proyecto {
+     min-width: 25%;
+    flex: 0 0 auto;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    opacity: 0.4;
+    transform: scale(0.85);
+    cursor: pointer;
+    
+}
+
+.proyecto img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.btn-cv {
+    display: inline-block;
+    padding: 10px 15px;
+    background: #00bcd4;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-cv:hover {
+    background: #0097a7;
+}
+/* efecto */
+.proyecto.active {
+    transform: scale(1.05);
+    opacity: 1;
+}
+
+@keyframes flotar {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0); }
+}
+
+
+
+/**NUEVO*/
+
+.carousel {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    padding: 20px 0;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.7s ease;
+    cursor: grab;
+    user-select: none;
+}
+
+.carousel-track:active {
+    cursor: grabbing;
+}
+
+.proyecto {
+    min-width: 320px;
+    flex: 0 0 auto;
+
+    border-radius: 20px;
+    overflow: hidden;
+
+    position: relative;
+
+    opacity: 0.5;
+    transform: scale(0.9);
+
+    transition: 0.4s;
+}
+
+.proyecto.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.proyecto img,
+.proyecto video,
+.proyecto iframe {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border: none;
+    display: block;
+}
+
+/*OVERLAY*/
+.proyecto.info {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+
+    background: linear-gradient(
+        transparent,
+        rgba(0,0,0,0.9)
+    );
+
+    color: white;
+
+    padding: 20px;
+}
+
+
+/*MODAL*/
+
+.modal {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0,0,0,0.9);
+
+    z-index: 9999;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.modal-content img,
+.modal-content video,
+.modal-content iframe {
+    width: 100%;
+    max-height: 85vh;
+    border-radius: 15px;
+}
+
+.cerrar {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+
+    font-size: 40px;
+    color: white;
+
+    cursor: pointer;
+}
