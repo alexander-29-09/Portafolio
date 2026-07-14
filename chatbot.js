@@ -43,7 +43,7 @@ async function verificarCV(url){
 }
 // ================= Carga historial =================
 
-function cargarHistorial(){
+//function cargarHistorial(){
     chatBox.innerHTML = "";
 
     historial.forEach(m => {
@@ -54,7 +54,7 @@ function cargarHistorial(){
     });
 
     chatBox.scrollTop = chatBox.scrollHeight;
-}
+//}
 // ================= UTIL =================
 function guardar(tipo, texto){
     historial.push({tipo, texto});

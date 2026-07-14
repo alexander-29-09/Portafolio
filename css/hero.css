@@ -407,7 +407,7 @@ header {
 
 
 .contenedor-skills {
-    background: linear-gradient(#58e4f7, rgba(33, 16, 16, 0.8)), url("../imagenes/fondo3.gif");
+    background: linear-gradient(#58e4f7, rgba(33, 16, 16, 0.8));
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;

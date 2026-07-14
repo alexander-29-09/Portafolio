@@ -3,7 +3,7 @@ export const perfil = {
     nombre: "Samuel Galicia",
     descripcion: "Desarrollador enfocado en soluciones web funcionales con backend sólido y bases de datos.",
 
-    estudios: "Ingeniería en Sistemas + especialización en Ciencia de Datos, también cuenta con cursos en  Desarrollo Frontend (2024)  • Hacking Ético a Dispositivos Móviles (2025) • Power BI (2026)" ,
+    estudios: "Ingeniería en Sistemas + especialización en Ciencia de Datos, también cuenta con cursos en  Desarrollo Frontend (2024)  • Hacking Ético a Dispositivos Móviles (2025) • Power BI (2026)",
 
     sobre_mi: `
 Me considero una persona proactiva, responsable y con mucha curiosidad por la tecnología.  
@@ -40,6 +40,6 @@ export const proyectos = [
         descripcion: "CRUD completo con base de datos.",
         tecnologias: ["ASP.NET MVC", "MySQL"],
         detalle: "Sistemas web funcionales orientados a negocio."
-        
+
     }
 ];

@@ -62,170 +62,229 @@ if (typeof particlesJS !== "undefined") {
 }
 
 
-// ================= CARRUSEL =================
-let index = 0;
-let autoScroll;
-
-const track = document.querySelector(".carousel-track");
-let items = document.querySelectorAll(".proyecto");
-
-if (track && items.length > 0) {
-
-    // duplicar elementos
-    track.innerHTML += track.innerHTML;
-
-    // volver a obtener elementos
-    items = document.querySelectorAll(".proyecto");
-
-    // transición inicial
-    track.style.transition = "transform 0.8s ease";
-
-    function actualizarCarrusel() {
-
-        const itemWidth = items[0].getBoundingClientRect().width;
-
-        // GAP DEL CSS
-        const gap = 20;
-
-        const offset = index * (itemWidth + gap);
-
-        track.style.transform = `translateX(-${offset}px)`;
-
-        // efecto activo
-        items.forEach(el => el.classList.remove("active"));
-
-        if(items[index]){
-            items[index].classList.add("active");
-        }
-    }
-
-    function iniciarAutoScroll() {
-
-        autoScroll = setInterval(() => {
-
-            index++;
-
-            // reset infinito
-            if (index >= items.length / 2) {
-
-                index = 0;
-
-                track.style.transition = "none";
-                track.style.transform = "translateX(0)";
-
-                setTimeout(() => {
-                    track.style.transition = "transform 0.8s ease";
-                }, 50);
-            }
-
-            requestAnimationFrame(() => {
-                actualizarCarrusel();
-            });
-
-        }, 3000);
-    }
-
-    function detenerAutoScroll() {
-        clearInterval(autoScroll);
-    }
-
-    const carousel = document.querySelector(".carousel");
-
-    if (carousel) {
-        carousel.addEventListener("mouseenter", detenerAutoScroll);
-        carousel.addEventListener("mouseleave", iniciarAutoScroll);
-    }
-
-    actualizarCarrusel();
-    iniciarAutoScroll();
-}
+/*=========================================
+            MODAL
+=========================================*/
 
 const modal = document.getElementById("modal");
 const modalContent = document.getElementById("modal-content");
 const cerrar = document.querySelector(".cerrar");
 
-document.querySelectorAll(".proyecto").forEach(card => {
+cerrar.addEventListener("click", () => {
+    modal.classList.remove("active");
+    modalContent.innerHTML = "";
+});
 
-    card.addEventListener("click", () => {
-
-        const img = card.querySelector("img");
-        const video = card.querySelector("video");
-        const iframe = card.querySelector("iframe");
-
+modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        modal.classList.remove("active");
         modalContent.innerHTML = "";
+    }
+});
+/*=========================================
+      CARRUSELES (PROYECTOS Y CERTIFICADOS)
+=========================================*/
 
-        if(img){
+inicializarCarrusel(
+    ".carousel",
+    ".carousel-track",
+    ".proyecto"
+);
 
-            modalContent.innerHTML =
-                `<img src="${img.src}">`;
+inicializarCarrusel(
+    ".certificados-carousel",
+    ".certificados-track",
+    ".certificado"
+);
+
+function inicializarCarrusel(carouselClass, trackClass, itemClass){
+
+    const carousel = document.querySelector(carouselClass);
+    const track = document.querySelector(trackClass);
+
+    if(!carousel || !track) return;
+
+    let items = track.querySelectorAll(itemClass);
+
+    if(items.length==0) return;
+
+    //Duplicar elementos
+    track.innerHTML += track.innerHTML;
+
+    items = track.querySelectorAll(itemClass);
+
+    let indice = 0;
+    let auto;
+
+    function actualizar(){
+
+        const ancho = items[0].getBoundingClientRect().width + 20;
+
+        track.style.transform =
+            `translateX(-${indice*ancho}px)`;
+
+        items.forEach(item=>item.classList.remove("active"));
+
+        if(items[indice]){
+            items[indice].classList.add("active");
+        }
+
+    }
+
+    function iniciar(){
+
+        auto = setInterval(()=>{
+
+            indice++;
+
+            if(indice>=items.length/2){
+
+                indice=0;
+
+                track.style.transition="none";
+                track.style.transform="translateX(0)";
+
+                setTimeout(()=>{
+
+                    track.style.transition="transform .8s";
+
+                },30);
+
+            }
+
+            actualizar();
+
+        },3000);
+
+    }
+
+    function detener(){
+
+        clearInterval(auto);
+
+    }
+
+    actualizar();
+
+    iniciar();
+
+    carousel.addEventListener("mouseenter",detener);
+
+    carousel.addEventListener("mouseleave",iniciar);
+
+    /*==================================
+            DRAG
+    ==================================*/
+
+    let presionado=false;
+
+    let inicioX=0;
+
+    let indiceInicial=0;
+
+    carousel.addEventListener("mousedown",(e)=>{
+
+        presionado=true;
+
+        inicioX=e.clientX;
+
+        indiceInicial=indice;
+
+        detener();
+
+    });
+
+    window.addEventListener("mouseup",()=>{
+
+        if(!presionado) return;
+
+        presionado=false;
+
+        iniciar();
+
+    });
+
+    window.addEventListener("mousemove",(e)=>{
+
+        if(!presionado) return;
+
+        const diferencia=e.clientX-inicioX;
+
+        if(Math.abs(diferencia)<70) return;
+
+        if(diferencia<0){
+
+            indice++;
+
+        }else{
+
+            indice--;
 
         }
 
-        if(video){
+        if(indice<0){
 
-            modalContent.innerHTML =
+            indice=items.length/2-1;
+
+        }
+
+        if(indice>=items.length/2){
+
+            indice=0;
+
+        }
+
+        actualizar();
+
+        presionado=false;
+
+    });
+
+    /*==================================
+            MODAL
+    ==================================*/
+
+    items.forEach(card=>{
+
+        card.addEventListener("click",()=>{
+
+            const img=card.querySelector("img");
+            const video=card.querySelector("video");
+            const iframe=card.querySelector("iframe");
+
+            modalContent.innerHTML="";
+
+            if(img){
+
+                modalContent.innerHTML=
+                `<img src="${img.src}">`;
+
+            }
+
+            if(video){
+
+                modalContent.innerHTML=
                 `<video controls autoplay>
                     <source src="${video.querySelector("source").src}">
                 </video>`;
-        }
 
-        if(iframe){
+            }
 
-            modalContent.innerHTML =
-                `<iframe
-                    src="${iframe.src}"
-                    allowfullscreen>
-                </iframe>`;
-        }
+            if(iframe){
 
-        modal.classList.add("active");
+                modalContent.innerHTML=
+                `<iframe src="${iframe.src}" allowfullscreen></iframe>`;
+
+            }
+
+            modal.classList.add("active");
+
+        });
+
     });
-});
 
-cerrar.addEventListener("click", () => {
-    modal.classList.remove("active");
-});
+}
 
-modal.addEventListener("click", e => {
-    if(e.target === modal){
-        modal.classList.remove("active");
-    }
-});
-
-let isDown = false;
-let startX;
-let scrollLeft;
-
-const carousel = document.querySelector(".carousel");
-
-carousel.addEventListener("mousedown", e => {
-
-    isDown = true;
-
-    startX = e.pageX - carousel.offsetLeft;
-    scrollLeft = carousel.scrollLeft;
-});
-
-carousel.addEventListener("mouseleave", () => {
-    isDown = false;
-});
-
-carousel.addEventListener("mouseup", () => {
-    isDown = false;
-});
-
-carousel.addEventListener("mousemove", e => {
-
-    if(!isDown) return;
-
-    e.preventDefault();
-
-    const x = e.pageX - carousel.offsetLeft;
-
-    const walk = (x - startX) * 2;
-
-    carousel.scrollLeft = scrollLeft - walk;
-});
 
 });
 
