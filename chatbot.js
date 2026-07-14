@@ -26,14 +26,14 @@ sonidoClick.volume = 0.2;
 sonidoTyping.volume = 0.2;
 
 
-function normalizar(texto){
+function normalizar(texto) {
     return texto.toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "");
 }
 // ================= VERIFICA QUE EL CV SE ENCUENTRE DISPONIBLE =================
 
-async function verificarCV(url){
+async function verificarCV(url) {
     try {
         const res = await fetch(url, { method: "HEAD" });
         return res.ok;
@@ -44,25 +44,25 @@ async function verificarCV(url){
 // ================= Carga historial =================
 
 //function cargarHistorial(){
-    chatBox.innerHTML = "";
+chatBox.innerHTML = "";
 
-    historial.forEach(m => {
-        const div = document.createElement("div");
-        div.className = m.tipo === "user" ? "msg-user" : "msg-bot";
-        div.innerHTML = m.texto;
-        chatBox.appendChild(div);
-    });
+historial.forEach(m => {
+    const div = document.createElement("div");
+    div.className = m.tipo === "user" ? "msg-user" : "msg-bot";
+    div.innerHTML = m.texto;
+    chatBox.appendChild(div);
+});
 
-    chatBox.scrollTop = chatBox.scrollHeight;
+chatBox.scrollTop = chatBox.scrollHeight;
 //}
 // ================= UTIL =================
-function guardar(tipo, texto){
-    historial.push({tipo, texto});
+function guardar(tipo, texto) {
+    historial.push({ tipo, texto });
     localStorage.setItem("chat_historial", JSON.stringify(historial));
 }
 
 // ================= MENSAJES =================
-function botMsg(texto){
+function botMsg(texto) {
     const div = document.createElement("div");
     div.className = "msg-bot";
     div.innerHTML = texto;
@@ -70,15 +70,15 @@ function botMsg(texto){
     chatBox.appendChild(div);
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    if(chatAbierto){
+    if (chatAbierto) {
         sonidoMensaje.currentTime = 0;
-        sonidoMensaje.play().catch(()=>{});
+        sonidoMensaje.play().catch(() => { });
     }
 
     guardar("bot", texto);
 }
 
-function userMsg(texto){
+function userMsg(texto) {
     const div = document.createElement("div");
     div.className = "msg-user";
     div.innerHTML = texto;
@@ -90,7 +90,7 @@ function userMsg(texto){
 }
 
 // ================= TYPING =================
-function typing(){
+function typing() {
     const div = document.createElement("div");
     div.className = "msg-bot typing";
     div.id = "typing";
@@ -100,10 +100,10 @@ function typing(){
     chatBox.scrollTop = chatBox.scrollHeight;
 
     sonidoTyping.loop = true;
-    sonidoTyping.play().catch(()=>{});
+    sonidoTyping.play().catch(() => { });
 }
 
-function removeTyping(){
+function removeTyping() {
     document.getElementById("typing")?.remove();
 
     sonidoTyping.pause();
@@ -111,7 +111,7 @@ function removeTyping(){
 }
 
 // ================= BOTONES =================
-function botones(opciones){
+function botones(opciones) {
     const div = document.createElement("div");
     div.className = "quick-actions";
 
@@ -127,25 +127,25 @@ function botones(opciones){
 }
 
 // ================= BIENVENIDA =================
-function bienvenida(){
+function bienvenida() {
     botMsg(`
 👋 Hola, soy Criss el asistente virtual de <b>${perfil.nombre}</b><br><br>
 Estoy aquí para ayudarte a conocer su perfil, proyectos o colaborar contigo.
     `);
 
     botones([
-    {texto:"💼 Experiencia", valor:"experiencia"},
-    {texto:"🚀 Proyectos", valor:"proyectos"},
-    {texto:"🧠 Habilidades", valor:"habilidades"},
-    {texto:"🎓 Estudios", valor:"estudios"},
-    {texto:"🙋 Sobre mí", valor:"sobre mi"},
-    {texto:"📩 Contacto", valor:"contacto"},
-    {texto:"📄 Descargar CV", valor:"cv"}
+        { texto: "💼 Experiencia", valor: "experiencia" },
+        { texto: "🚀 Proyectos", valor: "proyectos" },
+        { texto: "🧠 Habilidades", valor: "habilidades" },
+        { texto: "🎓 Estudios", valor: "estudios" },
+        { texto: "🙋 Sobre mí", valor: "sobre mi" },
+        { texto: "📩 Contacto", valor: "contacto" },
+        { texto: "📄 Descargar CV", valor: "cv" }
     ]);
 }
 
 // ================= PROYECTOS =================
-function mostrarProyectos(){
+function mostrarProyectos() {
     let html = "🚀 <b>Proyectos destacados:</b><br><br>";
 
     proyectos.forEach(p => {
@@ -160,14 +160,14 @@ function mostrarProyectos(){
     })));
 }
 
-function detalleProyecto(msg){
+function detalleProyecto(msg) {
 
     const p = proyectos.find(x =>
         msg.includes(x.id) ||
         msg.includes(x.nombre.toLowerCase())
     );
 
-    if(!p){
+    if (!p) {
         botMsg("No encontré ese proyecto 😅 intenta con otro");
         return;
     }
@@ -184,13 +184,13 @@ ${p.tecnologias.join(", ")}<br><br>
 }
 // ================= RESPONDER =================
 // ================= RESPONDER =================
-function responder(msg){
+function responder(msg) {
 
-     if(!msg) return;
+    if (!msg) return;
     msg = normalizar(msg);
 
     // 🔄 VOLVER A INICIO (IMPORTANTE PONERLO ARRIBA)
-    if(msg.includes("menu") || msg.includes("inicio") || msg.includes("volver")){
+    if (msg.includes("menu") || msg.includes("inicio") || msg.includes("volver")) {
         estado = "inicio";
         botMsg("Perfecto 😄 volvamos al inicio 👇");
         bienvenida();
@@ -198,14 +198,14 @@ function responder(msg){
     }
 
     // 👋 SALUDO
-    if(msg.includes("hola") || msg.includes("buenas") || msg.includes("hey")){
+    if (msg.includes("hola") || msg.includes("buenas") || msg.includes("hey")) {
         estado = "inicio";
         bienvenida();
         return;
     }
 
     // 💼 EXPERIENCIA
-    if(msg.includes("experiencia")){
+    if (msg.includes("experiencia")) {
         estado = "inicio";
         botMsg(`
 💼 <b>Experiencia profesional</b><br><br>
@@ -228,10 +228,10 @@ Atención al cliente, gestión de pedidos y apoyo en procesos administrativos.
     }
 
     // 🧠 HABILIDADES
-    if(msg.includes("habilidades")){
-    estado = "inicio";
+    if (msg.includes("habilidades")) {
+        estado = "inicio";
 
-    botMsg(`
+        botMsg(`
 Perfecto 👌 te comento que <b>${perfil.nombre}</b> posee habilidades personales y técnicas.<br><br>
 
 Te las muestro 👇<br><br>
@@ -243,22 +243,22 @@ Te las muestro 👇<br><br>
 - ${perfil.habilidades.blandas.join("<br>- ")}
     `);
 
-    return;
-}
+        return;
+    }
 
-// DESCARGAR DE CV 
+    // DESCARGAR DE CV 
 
-if(msg.includes("cv") || msg.includes("curriculum") || msg.includes("hoja de vida")){
-    estado = "inicio";
+    if (msg.includes("cv") || msg.includes("curriculum") || msg.includes("hoja de vida")) {
+        estado = "inicio";
 
-    const urlCV = "cv/Curriculum.pdf";
+        const urlCV = "cv/Curriculum.pdf";
 
-    botMsg("🔎 Verificando disponibilidad del CV...");
+        botMsg("🔎 Verificando disponibilidad del CV...");
 
-    verificarCV(urlCV).then(existe => {
+        verificarCV(urlCV).then(existe => {
 
-        if(existe){
-            botMsg(`
+            if (existe) {
+                botMsg(`
 📄 <b>Currículum de ${perfil.nombre}</b><br><br>
 
 Puedes descargarlo aquí 👇<br><br>
@@ -267,40 +267,40 @@ Puedes descargarlo aquí 👇<br><br>
 ⬇ Descargar CV
 </a>
             `);
-        }else{
-            botMsg(`
+            } else {
+                botMsg(`
 ⚠️ Al parecer aún no he subido mi CV.<br><br>
 
 Pero puedes solicitarlo directamente y con gusto te lo envío 📩👇
             `);
 
-            botones([
-                {texto:"📩 Contactar", valor:"contacto"}
-            ]);
-        }
+                botones([
+                    { texto: "📩 Contactar", valor: "contacto" }
+                ]);
+            }
 
-    });
+        });
 
-    return;
-}
-//  Sobre mi
+        return;
+    }
+    //  Sobre mi
 
-if(msg.includes("sobre") || msg.includes("perfil") || msg.includes("personal")){
-    estado = "inicio";
+    if (msg.includes("sobre") || msg.includes("perfil") || msg.includes("personal")) {
+        estado = "inicio";
 
-    botMsg(`
+        botMsg(`
 🙋 <b>Sobre ${perfil.nombre}</b><br><br>
 
 ${perfil.sobre_mi}
     `);
 
-    return;
-}
-//  Estudios
-if(msg.includes("estudio")){
-    estado = "inicio";
+        return;
+    }
+    //  Estudios
+    if (msg.includes("estudio")) {
+        estado = "inicio";
 
-    botMsg(`
+        botMsg(`
 🎓 <b>Formación académica</b><br><br>
 
 ${perfil.nombre} cuenta con la siguiente formación:<br><br>
@@ -310,55 +310,55 @@ ${perfil.nombre} cuenta con la siguiente formación:<br><br>
 Además, se mantiene en constante aprendizaje para fortalecer sus habilidades en desarrollo y tecnología.
     `);
 
-    return;
-}
+        return;
+    }
 
     // 🚀 PROYECTOS
-    if(msg.includes("proyecto") || msg.includes("trabajos")){
+    if (msg.includes("proyecto") || msg.includes("trabajos")) {
         estado = "proyectos";
         mostrarProyectos();
         return;
     }
 
     // 🔍 DETALLE DE PROYECTOS (SOLO SI ESTÁ EN ESE ESTADO)
-    if(estado === "proyectos"){
+    if (estado === "proyectos") {
         detalleProyecto(msg);
         return;
     }
 
     // 📩 CONTACTO
-    if(msg.includes("contacto") || msg.includes("contratar")){
+    if (msg.includes("contacto") || msg.includes("contratar")) {
         estado = "nombre";
         botMsg("Perfecto 🙌 ¿Cuál es tu nombre?");
         return;
     }
 
-    if(estado === "nombre"){
+    if (estado === "nombre") {
         datos.nombre = msg;
         estado = "email";
         botMsg(`Mucho gusto ${msg} 😊 ¿Cuál es tu correo?`);
         return;
     }
 
-    if(estado === "email"){
+    if (estado === "email") {
         datos.email = msg;
         estado = "mensaje";
         botMsg("Escribe tu mensaje 👇");
         return;
     }
 
-    if(estado === "mensaje"){
+    if (estado === "mensaje") {
         datos.mensaje = msg;
 
         botMsg("📩 Enviando mensaje...");
 
         fetch("https://portafolio-ebt4.onrender.com/contact", {
             method: "POST",
-            headers: {"Content-Type":"application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
         })
-        .then(()=> botMsg("🔥 Mensaje enviado correctamente. Te responderán pronto 😉"))
-        .catch(()=> botMsg("⚠️ Error al enviar el mensaje"));
+            .then(() => botMsg("🔥 Mensaje enviado correctamente. Te responderán pronto 😉"))
+            .catch(() => botMsg("⚠️ Error al enviar el mensaje"));
 
         estado = "inicio";
         return;
@@ -369,38 +369,38 @@ Además, se mantiene en constante aprendizaje para fortalecer sus habilidades en
 }
 
 // ================= EVENTOS =================
-window.enviarOpcion = function(valor){
-    sonidoClick.play().catch(()=>{});
+window.enviarOpcion = function (valor) {
+    sonidoClick.play().catch(() => { });
 
     userMsg(valor);
     typing();
 
     const tiempo = 700 + Math.random() * 800;
 
-    setTimeout(()=>{
+    setTimeout(() => {
         removeTyping();
         responder(valor);
     }, tiempo);
 };
 
-if(input){
-    input.addEventListener("keydown", function(e){
-        if(e.key === "Enter"){
+if (input) {
+    input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
             e.preventDefault();
 
             const msg = this.value.trim();
-            if(!msg) return;
+            if (!msg) return;
 
             this.value = "";
 
-            sonidoClick.play().catch(()=>{});
+            sonidoClick.play().catch(() => { });
 
             userMsg(msg);
             typing();
 
             const tiempo = 700 + Math.random() * 800;
 
-            setTimeout(()=>{
+            setTimeout(() => {
                 removeTyping();
                 responder(msg);
             }, tiempo);
@@ -409,10 +409,10 @@ if(input){
 }
 
 // ================= INIT =================
-setTimeout(()=>{
+setTimeout(() => {
     typing();
 
-    setTimeout(()=>{
+    setTimeout(() => {
         removeTyping();
         bienvenida();
     }, 1200);
@@ -424,7 +424,7 @@ if (toggleBtn && chat) {
 
         // 🔊 sonido click
         sonidoClick.currentTime = 0;
-        sonidoClick.play().catch(()=>{});
+        sonidoClick.play().catch(() => { });
 
         // evitar doble click mientras anima
         if (animandoChat) return;
