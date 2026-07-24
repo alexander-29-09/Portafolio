@@ -347,7 +347,64 @@ MODAL
     transform:scale(1.2);
 
 }
+/*=========================================
+        MODAL CERTIFICADOS
+=========================================*/
 
+.modal-certificado{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:9999;
+
+    justify-content:center;
+    align-items:center;
+
+    background:rgba(0,0,0,.85);
+
+    backdrop-filter:blur(8px);
+
+}
+
+.modal-certificado.active{
+
+    display:flex;
+
+}
+
+#visorPDF{
+
+    display:block;
+
+    max-width:90%;
+
+    max-height:90vh;
+
+    border-radius:18px;
+
+    object-fit:contain;
+
+}
+
+.cerrar-certificado{
+
+    position:absolute;
+
+    top:20px;
+
+    right:30px;
+
+    color:#fff;
+
+    font-size:42px;
+
+    cursor:pointer;
+
+}
 /*==========================
 RESPONSIVE
 ==========================*/

@@ -139,3 +139,56 @@
         transform: translateY(0);
     }
 }
+.footer-visitas{
+
+    margin-top:18px;
+
+    width:230px;
+
+    padding:14px 18px;
+
+    border-radius:15px;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(88,228,247,.25);
+
+    backdrop-filter:blur(10px);
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    transition:.3s;
+
+}
+
+.footer-visitas i{
+
+    font-size:26px;
+    color:#58e4f7;
+
+}
+
+.footer-visitas h5{
+
+    flex:1;
+    margin-left:15px;
+
+    text-align:left;
+
+    color:#fff;
+
+    font-size:15px;
+
+}
+
+#contador-visitas{
+
+    font-size:30px;
+
+    color:#58e4f7;
+
+    font-weight:bold;
+
+}

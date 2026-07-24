@@ -628,7 +628,19 @@
                     <a href="#"><i class="fa-brands fa-github"></i></a>
                     <a href="#"><i class="fa-brands fa-youtube"></i></a>
                 </div>
+
+                <!-- CONTADOR -->
+    
             </div>
+            <div class="footer-visitas">
+
+        <i class="fa-solid fa-eye"></i>
+
+        <h5>Visitantes</h5>
+
+        <span id="contador-visitas">0</span>
+
+    </div>
 
         </div>
 
@@ -637,13 +649,25 @@
 -->
         <div class="footer-bottom">
             <p>© 2026 Samuel Galicia | Portafolio Profesional</p>
+            
         </div>
+        
+
+</div>
+        
 
     </footer>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
     <script type="module" src="chatbot.js"></script>
+    <script type="module" src="firebase.js"></script>
     <script src="script.js"></script>
+    <div id="modalCertificado" class="modal-certificado">
+
+        <span class="cerrar-certificado">&times;</span>
+
+        <img id="visorPDF" src="" alt="">
+    </div>
 
 
     <div id="modal" class="modal">
@@ -651,19 +675,16 @@
         <span class="cerrar">&times;</span>
 
         <div class="modal-content" id="modal-content"></div>
+       
 
     </div>
+
+    
     <!-- ==========================
      MODAL CERTIFICADOS
 ========================== -->
-
-    <div id="modalCertificado" class="modal-certificado">
-
-        <span class="cerrar-certificado">&times;</span>
-
-        <img id="visorPDF" src="" alt="Certificado">
-
-    </div>
+ 
+    
 
 
 </body>
