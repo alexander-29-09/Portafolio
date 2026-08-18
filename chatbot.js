@@ -3,7 +3,10 @@ import { perfil, proyectos } from "./data.js";
 // ================= ESTADO =================
 let estado = "inicio";
 let datos = {};
-let historial = JSON.parse(localStorage.getItem("chat_historial")) || [];
+
+const DURACION_HISTORIAL = 60 * 60 * 1000; // 1 hora
+
+let historial = [];
 
 
 
@@ -43,8 +46,47 @@ async function verificarCV(url) {
 }
 // ================= Carga historial =================
 
-//function cargarHistorial(){
+function cargarHistorial(){
 chatBox.innerHTML = "";
+
+function cargarHistorialGuardado() {
+
+    const historialGuardado =
+        localStorage.getItem("chat_historial");
+
+    const tiempoGuardado =
+        localStorage.getItem("chat_historial_tiempo");
+
+    if (!historialGuardado || !tiempoGuardado) {
+        historial = [];
+        return;
+    }
+
+    const tiempoActual = Date.now();
+    const tiempoCreacion = parseInt(tiempoGuardado);
+
+    if (tiempoActual - tiempoCreacion >= DURACION_HISTORIAL) {
+
+        localStorage.removeItem("chat_historial");
+        localStorage.removeItem("chat_historial_tiempo");
+
+        historial = [];
+
+        return;
+    }
+
+    try {
+        historial = JSON.parse(historialGuardado) || [];
+    } catch {
+
+        historial = [];
+
+        localStorage.removeItem("chat_historial");
+        localStorage.removeItem("chat_historial_tiempo");
+    }
+}
+
+cargarHistorialGuardado();
 
 historial.forEach(m => {
     const div = document.createElement("div");
@@ -54,11 +96,29 @@ historial.forEach(m => {
 });
 
 chatBox.scrollTop = chatBox.scrollHeight;
-//}
+}
 // ================= UTIL =================
 function guardar(tipo, texto) {
-    historial.push({ tipo, texto });
-    localStorage.setItem("chat_historial", JSON.stringify(historial));
+
+    historial.push({
+        tipo,
+        texto
+    });
+
+    localStorage.setItem(
+        "chat_historial",
+        JSON.stringify(historial)
+    );
+
+    // Guardar la hora solamente cuando comienza
+    // un historial nuevo
+    if (!localStorage.getItem("chat_historial_tiempo")) {
+
+        localStorage.setItem(
+            "chat_historial_tiempo",
+            Date.now().toString()
+        );
+    }
 }
 
 // ================= MENSAJES =================
@@ -125,7 +185,14 @@ function botones(opciones) {
     chatBox.appendChild(div);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
-
+function botonMenu() {
+    botones([
+        {
+            texto: "🔙 Regresar al menú principal",
+            valor: "inicio"
+        }
+    ]);
+}
 // ================= BIENVENIDA =================
 function bienvenida() {
     botMsg(`
@@ -183,30 +250,164 @@ ${p.tecnologias.join(", ")}<br><br>
     `);
 }
 // ================= RESPONDER =================
-// ================= RESPONDER =================
 function responder(msg) {
 
     if (!msg) return;
+
     msg = normalizar(msg);
 
-    // 🔄 VOLVER A INICIO (IMPORTANTE PONERLO ARRIBA)
-    if (msg.includes("menu") || msg.includes("inicio") || msg.includes("volver")) {
+    // =====================================================
+    // 📩 CONTACTO
+    // =====================================================
+
+    // 👤 Esperando nombre
+    if (estado === "nombre") {
+
+        datos.nombre = msg;
+
+        estado = "email";
+
+        botMsg(`Mucho gusto ${msg} 😊 ¿Cuál es tu correo?`);
+
+        return;
+    }
+
+
+    // 📧 Esperando correo
+    if (estado === "email") {
+
+        datos.email = msg;
+
+        estado = "mensaje";
+
+        botMsg("Escribe tu mensaje 👇");
+
+        return;
+    }
+
+
+    // 📝 Esperando mensaje
+    if (estado === "mensaje") {
+
+        datos.mensaje = msg;
+
+        botMsg("📩 Enviando mensaje...");
+
+        fetch("https://portafolio-ebt4.onrender.com/contact", {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(datos)
+        })
+
+        .then(async response => {
+
+            if (!response.ok) {
+
+                const error = await response.text();
+
+                console.error(
+                    "Error del servidor:",
+                    response.status,
+                    error
+                );
+
+                throw new Error(
+                    `Error HTTP ${response.status}`
+                );
+            }
+
+            return response.json().catch(() => ({}));
+        })
+
+        .then(data => {
+
+            console.log(
+                "Respuesta del servidor:",
+                data
+            );
+
+            botMsg(
+                "🔥 ¡Mensaje enviado correctamente! " +
+                "Te responderán pronto 😉"
+            );
+            botonMenu();
+
+        })
+
+        .catch(error => {
+
+            console.error(
+                "Error enviando contacto:",
+                error
+            );
+
+            botMsg(
+                "⚠️ No se pudo enviar el mensaje en este momento. " +
+                "Por favor intenta nuevamente."
+            );
+            botonMenu();
+
+        });
+
+        // Limpiar los datos para el próximo contacto
+        datos = {};
         estado = "inicio";
+       
+
+        return;
+    }
+
+
+    // =====================================================
+    // VOLVER A INICIO
+    // =====================================================
+
+    if (
+        msg.includes("menu") ||
+        msg.includes("inicio") ||
+        msg.includes("volver")
+    ) {
+
+        estado = "inicio";
+
         botMsg("Perfecto 😄 volvamos al inicio 👇");
+
         bienvenida();
+
         return;
     }
 
+
+    // =====================================================
     // 👋 SALUDO
-    if (msg.includes("hola") || msg.includes("buenas") || msg.includes("hey")) {
+    // =====================================================
+
+    if (
+        msg.includes("hola") ||
+        msg.includes("buenas") ||
+        msg.includes("hey")
+    ) {
+
         estado = "inicio";
+
         bienvenida();
+
         return;
     }
 
+
+    // =====================================================
     // 💼 EXPERIENCIA
+    // =====================================================
+
     if (msg.includes("experiencia")) {
+
         estado = "inicio";
+
         botMsg(`
 💼 <b>Experiencia profesional</b><br><br>
 
@@ -224,11 +425,18 @@ Resolución de incidencias técnicas para clientes PYMES y usuarios finales, sop
 Enero 2020 – Julio 2020<br>
 Atención al cliente, gestión de pedidos y apoyo en procesos administrativos.
         `);
+        botonMenu();
+
         return;
     }
 
+
+    // =====================================================
     // 🧠 HABILIDADES
+    // =====================================================
+
     if (msg.includes("habilidades")) {
+
         estado = "inicio";
 
         botMsg(`
@@ -241,14 +449,24 @@ Te las muestro 👇<br><br>
 
 🤝 <b>Habilidades blandas:</b><br>
 - ${perfil.habilidades.blandas.join("<br>- ")}
-    `);
+        `);
+
+        botonMenu();
 
         return;
     }
 
-    // DESCARGAR DE CV 
 
-    if (msg.includes("cv") || msg.includes("curriculum") || msg.includes("hoja de vida")) {
+    // =====================================================
+    // 📄 CV
+    // =====================================================
+
+    if (
+        msg.includes("cv") ||
+        msg.includes("curriculum") ||
+        msg.includes("hoja de vida")
+    ) {
+
         estado = "inicio";
 
         const urlCV = "cv/Curriculum.pdf";
@@ -258,6 +476,7 @@ Te las muestro 👇<br><br>
         verificarCV(urlCV).then(existe => {
 
             if (existe) {
+
                 botMsg(`
 📄 <b>Currículum de ${perfil.nombre}</b><br><br>
 
@@ -266,38 +485,61 @@ Puedes descargarlo aquí 👇<br><br>
 <a href="${urlCV}" download target="_blank" class="btn-cv">
 ⬇ Descargar CV
 </a>
-            `);
+                `);
+
             } else {
+
                 botMsg(`
 ⚠️ Al parecer aún no he subido mi CV.<br><br>
 
 Pero puedes solicitarlo directamente y con gusto te lo envío 📩👇
-            `);
+                `);
 
                 botones([
-                    { texto: "📩 Contactar", valor: "contacto" }
+                    {
+                        texto: "📩 Contactar",
+                        valor: "contacto"
+                    }
                 ]);
             }
 
         });
+        
 
         return;
+        
     }
-    //  Sobre mi
 
-    if (msg.includes("sobre") || msg.includes("perfil") || msg.includes("personal")) {
+
+    // =====================================================
+    // 🙋 SOBRE MÍ
+    // =====================================================
+
+    if (
+        msg.includes("sobre") ||
+        msg.includes("perfil") ||
+        msg.includes("personal")
+    ) {
+
         estado = "inicio";
 
         botMsg(`
 🙋 <b>Sobre ${perfil.nombre}</b><br><br>
 
 ${perfil.sobre_mi}
-    `);
+        `);
+        botonMenu();
 
         return;
     }
-    //  Estudios
+
+
+    // =====================================================
+    // 🎓 ESTUDIOS
+    // =====================================================
+
     if (msg.includes("estudio")) {
+
         estado = "inicio";
 
         botMsg(`
@@ -308,64 +550,63 @@ ${perfil.nombre} cuenta con la siguiente formación:<br><br>
 📊 ${perfil.estudios}<br><br>
 
 Además, se mantiene en constante aprendizaje para fortalecer sus habilidades en desarrollo y tecnología.
-    `);
+        `);
+        botonMenu();
 
         return;
     }
 
+
+    // =====================================================
     // 🚀 PROYECTOS
-    if (msg.includes("proyecto") || msg.includes("trabajos")) {
+    // =====================================================
+
+    if (
+        msg.includes("proyecto") ||
+        msg.includes("trabajos")
+    ) {
+
         estado = "proyectos";
+
         mostrarProyectos();
+        botonMenu();
+
         return;
     }
 
-    // 🔍 DETALLE DE PROYECTOS (SOLO SI ESTÁ EN ESE ESTADO)
+
+    // =====================================================
+    // 🔍 DETALLE DE PROYECTOS
+    // =====================================================
+
     if (estado === "proyectos") {
+
         detalleProyecto(msg);
+        botonMenu();
+
         return;
     }
 
-    // 📩 CONTACTO
-    if (msg.includes("contacto") || msg.includes("contratar")) {
+
+    // =====================================================
+    // 📩 INICIAR CONTACTO
+    // =====================================================
+
+    if (
+        msg.includes("contacto") ||
+        msg.includes("contratar")
+    ) {
+
+        datos = {};
+
         estado = "nombre";
-        botMsg("Perfecto 🙌 ¿Cuál es tu nombre?");
+
+        botMsg(
+            "Perfecto 🙌 ¿Cuál es tu nombre?"
+        );
+
         return;
     }
-
-    if (estado === "nombre") {
-        datos.nombre = msg;
-        estado = "email";
-        botMsg(`Mucho gusto ${msg} 😊 ¿Cuál es tu correo?`);
-        return;
-    }
-
-    if (estado === "email") {
-        datos.email = msg;
-        estado = "mensaje";
-        botMsg("Escribe tu mensaje 👇");
-        return;
-    }
-
-    if (estado === "mensaje") {
-        datos.mensaje = msg;
-
-        botMsg("📩 Enviando mensaje...");
-
-        fetch("https://portafolio-ebt4.onrender.com/contact", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(datos)
-        })
-            .then(() => botMsg("🔥 Mensaje enviado correctamente. Te responderán pronto 😉"))
-            .catch(() => botMsg("⚠️ Error al enviar el mensaje"));
-
-        estado = "inicio";
-        return;
-    }
-
-    // 🤖 RESPUESTA DEFAULT
-    botMsg("Puedo ayudarte con proyectos, experiencia o contacto 😊");
 }
 
 // ================= EVENTOS =================
